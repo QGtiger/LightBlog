@@ -1,0 +1,26 @@
+.container{
+	margin:20px 60px 0 60px;
+}
+
+.list-group{
+	border-bottom:1px solid #f0f0f0;
+	margin:20px 0 20px 0;
+	padding-bottom: 20px;
+}
+
+.list-group .list-group-item-heading{
+	font-weight:700;
+	margin:0 0 7px 0;
+}
+
+.list-group .list-group-item-text{
+    padding: 8px 10px;
+}
+
+.meta span{
+    color: #b4b4b4 !important;
+}
+
+.meta .update_time{
+	float:right;
+}

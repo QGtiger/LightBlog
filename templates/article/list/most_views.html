@@ -1,0 +1,5 @@
+<ol>
+    {% for article in most_viewed %}
+    <li><a href="{% url 'article:article_content' article.id %}">{{ forloop.counter }}. {{ article.title }}</a></li>
+    {% endfor %}
+</ol>
