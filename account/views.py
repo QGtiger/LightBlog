@@ -247,6 +247,7 @@ def article_like(request, username):
     for i in range(len(article_list)):
         articles_json.append({'id': article_list[i].id, 'title': article_list[i].title,
                               'updated': article_list[i].updated.strftime("%Y-%m-%d %H:%M:%S"),
+                              'author': article_list[i].author.username,
                               'body': article_list[i].body[:70], 'users_like': article_list[i].users_like.count()})
     return HttpResponse(json.dumps({'code':201, 'data':articles_json, 'page_num':paginator.num_pages}))
 
