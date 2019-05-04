@@ -171,3 +171,4 @@ def like_article(request):
                 return HttpResponse(json.dumps({'static':202,'tips':'我会努力的', 'num':num,'user':user.username}))
         except:
             return HttpResponse(json.dumps({'static':500,'tips':'系统错误,重新尝试'}))
+

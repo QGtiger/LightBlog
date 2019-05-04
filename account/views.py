@@ -227,3 +227,26 @@ def author_info(request, username):
     user = User.objects.get(username=username)
     userinfo = UserInfo.objects.get(user=user)
     return render(request, 'account/myself.html', locals())
+
+
+def article_like(request, username):
+    user = User.objects.get(username=username)
+    articles = user.users_like.all()
+    paginator = Paginator(articles, 6)
+    page = request.GET.get('page')
+    try:
+        current_page = paginator.page(page)
+        article_list = current_page.object_list
+    except PageNotAnInteger:
+        current_page = paginator.page(1)
+        article_list = current_page.object_list
+    except EmptyPage:
+        current_page = paginator.page(paginator.num_pages)
+        article_list = current_page.object_list
+    articles_json = []
+    for i in range(len(article_list)):
+        articles_json.append({'id': article_list[i].id, 'title': article_list[i].title,
+                              'updated': article_list[i].updated.strftime("%Y-%m-%d %H:%M:%S"),
+                              'body': article_list[i].body[:70], 'users_like': article_list[i].users_like.count()})
+    return HttpResponse(json.dumps({'code':201, 'data':articles_json, 'page_num':paginator.num_pages}))
+

@@ -25,4 +25,6 @@ urlpatterns = [
     path(r'author/<path:username>', views.author_info, name='author_info'),
     # 个人信息中心的博客文章的流加载
     path(r'article_page/<path:username>', views.article_page, name="article_page"),
+    # 个人喜欢的文章
+    path(r'article_like/<path:username>', views.article_like, name="article_like")
 ]

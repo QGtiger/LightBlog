@@ -59,24 +59,23 @@
         </div>
     </div>
 
-    <div style="margin:0 5%;">
-    <!--{% for article in articles %}-->
-    <!--<div class="list-group">-->
-        <!--<a href="{% url 'article:article_content' article.id %}" class="list-group-item active">-->
-            <!--<h3 class="list-group-item-heading">{{article.title}}</h3>-->
-        <!--</a>-->
-        <!--<p class="list-group-item-text">概要:{{article.body|slice:'70'| linebreaks}}</p>-->
-    <!--</div>-->
-    <!--{% endfor %}-->
-        <ul id="flow_myself" ></ul>
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief" style="margin: 0 5%">
+    <ul class="layui-tab-title">
+        <li class="layui-this">个人文章</li>
+        <li>点赞文章</li>
+    </ul>
+    <div class="layui-tab-content" style="height: 100px;">
+        <ul class="layui-tab-item layui-show" id="flow_myself"></ul>
+        <ul class="layui-tab-item" id="flow_article"></ul>
     </div>
-
+</div>
 
 
 <script type="text/javascript">
-	layui.use(['layer','flow'],function(){
+	layui.use(['layer','flow','element'],function(){
 		var layer = layui.layer;
 		var flow = layui.flow;
+		var element = layui.element;
 
 		flow.load({
 			elem: "#flow_myself",
@@ -96,6 +95,41 @@
                             '<a href="/article/article_content/'+res[i].id+'" class="list-group-item active">'+
                                 '<h3 class="list-group-item-heading">'+res[i].title+'</h3>'+
                             '</a>'+
+                            '<p class="list-group-item-text">概要:'+res[i].body+'</p>'+
+                            '<p class="meta"><span><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
+                            '<span class="update_time">'+res[i].updated+'</span>'+
+                            '</p>'+
+                        '</div>';
+
+                        lis+=item;
+
+				    }
+				    next(lis,page<page_num)
+				})
+
+
+			}
+		})
+
+		flow.load({
+			elem: "#flow_article",
+			is_Auto:true,
+			end: "emm,nothing next",
+			is_Lazyimg: true,
+			done: function(page,next){
+				var lis = '';
+				$.get('/account/article_like/{{ user.username }}?page='+page, function(e){
+				    parse_res = JSON.parse(e)
+                    res = parse_res.data
+                    page_num = parse_res.page_num
+                    console.log(res)
+				    for(var i = 0; i < res.length; i++){
+
+                        var item = '<div class="list-group">'+
+                            '<a href="/article/article_content/'+res[i].id+'" class="list-group-item active">'+
+                                '<h3 class="list-group-item-heading">'+res[i].title+'</h3>'+
+                            '</a>'+
+                            '<p class="list-group-item-text">作者:'+res[i].author+'</p>'+
                             '<p class="list-group-item-text">概要:'+res[i].body+'</p>'+
                             '<p class="meta"><span><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
                             '<span class="update_time">'+res[i].updated+'</span>'+
