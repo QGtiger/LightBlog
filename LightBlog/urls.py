@@ -18,6 +18,10 @@ from django.urls import path,include
 from django.views import static
 from django.conf import settings
 from django.conf.urls import url
+from article import views
+handler404 = views.page_not_found
+handler500 = views.page_not_found
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

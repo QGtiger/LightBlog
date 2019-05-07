@@ -174,3 +174,7 @@ def like_article(request):
         except:
             return HttpResponse(json.dumps({'static':500,'tips':'系统错误,重新尝试'}))
 
+
+# 404,505页面
+def page_not_found(request):
+    return render(request, '404/error404.html', status=404)
