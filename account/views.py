@@ -21,7 +21,6 @@ import shutil
 # Create your views here.
 @csrf_exempt
 def account_login(request):
-    username = request.session.get('username')
     title = ' LFBlog 登录 '
     unit_2 = '/account/register/'
     unit_2_name = ' 立即注册 '
@@ -35,7 +34,7 @@ def account_login(request):
             if user:
                 if user.is_active:
                     login(request,user)
-                    request.session['username'] = username # 验证是否登录成功，存储到session
+                    # request.session['username'] = username # 验证是否登录成功，存储到session
                     return HttpResponse(json.dumps({'status':1,'tips':' 登录成功 '}))
             else:
                 # tips = ' 账号错误，请重新输入 '
@@ -48,12 +47,11 @@ def account_login(request):
 
 def account_logout(request):
     logout(request)
-    del request.session['username']
     return redirect('/blog/')
+
 
 @csrf_exempt
 def account_register(request):
-    username = request.session.get('username')
     title = ' LFBlog 注册 '
     unit_2 = '/account/login/'
     unit_2_name = ' 立即登录 '
@@ -80,7 +78,6 @@ def account_register(request):
             user.save()
             UserInfo.objects.create(user=user)
             login(request, user)
-            request.session['username'] = username  # 验证是否登录成功，存储到session
             default_img = '{}/avator/{}.jpg'.format(settings.MEDIA_ROOT, '1554199336240')
             avator_img = '{}/avator/{}.jpg'.format(settings.MEDIA_ROOT, username)
             shutil.copy(default_img,avator_img)
@@ -124,7 +121,6 @@ def account_setpassword(request):
                     user[0].save()
                     del request.session['code']
                     login(request,user[0])
-                    request.session['username']=username
                     #return redirect('/blog/')
                     return HttpResponse(json.dumps({'status':2,'tips':' 修改成功,直接登录 '}))
                 else:
