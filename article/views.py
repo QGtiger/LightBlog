@@ -176,5 +176,5 @@ def like_article(request):
 
 
 # 404,505页面
-def page_not_found(request):
+def page_not_found(request, exception):
     return render(request, '404/error404.html', status=404)
