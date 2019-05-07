@@ -12,6 +12,7 @@ from django.core.paginator import PageNotAnInteger,Paginator,EmptyPage
 from .models import UserInfo
 from django.contrib.auth.decorators import login_required
 from article.models import ArticlePost
+from article.list_views import init_blog
 from .forms import *
 import json
 import shutil
@@ -44,8 +45,10 @@ def account_login(request):
             return HttpResponse(json.dumps({'status':3,'tips':' 用户名不存在，请注册 '}))
     return render(request, 'account/account_login.html', locals())
 
+
 def account_logout(request):
     logout(request)
+    del request.session['username']
     return redirect('/blog/')
 
 @csrf_exempt
@@ -89,7 +92,7 @@ def account_register(request):
 
 @csrf_exempt
 def account_setpassword(request):
-    username = request.session.get('username')
+    username = request.user.username
     button = ' 获取验证码 '
     new_password = True
     title = 'LFBlog 修改密码'
@@ -136,9 +139,8 @@ def account_setpassword(request):
 
 @login_required(login_url='/account/login/')
 def myself(request):
-    username = request.session.get('username','')
-    title = "{} 个人信息".format(username)
-    user = User.objects.get(username=username)
+    user = request.user
+    title = "{} 个人信息".format(user.username)
     userinfo = UserInfo.objects.get(user=user)
     return render(request,'account/myself.html',locals())
 
@@ -159,7 +161,7 @@ def article_page(request, username):
         articles = current_page.object_list
     articles_json = []
     for i in range(len(articles)):
-        articles_json.append({'id':articles[i].id,'title':articles[i].title,'updated':articles[i].updated.strftime("%Y-%m-%d %H:%M:%S"),'body':articles[i].body[:70],'users_like':articles[i].users_like.count()})
+        articles_json.append({'id':articles[i].id,'title':articles[i].title,'updated':articles[i].updated.strftime("%Y-%m-%d %H:%M:%S"),'body': init_blog(articles[i].body[:150]), 'users_like':articles[i].users_like.count()})
     #return HttpResponse(serializers.serialize("json",articles))
     return HttpResponse(json.dumps({'static':200,'data':articles_json,'page_num':paginator.num_pages}))
 
@@ -167,8 +169,7 @@ def article_page(request, username):
 @login_required(login_url='/account/login/')
 @csrf_exempt
 def myself_edit(request):
-    username = request.session.get('username','')
-    user = User.objects.get(username=username)
+    user = request.user
     userinfo = UserInfo.objects.get(user=user)
     if request.method == 'POST':
         try:
@@ -248,6 +249,6 @@ def article_like(request, username):
         articles_json.append({'id': article_list[i].id, 'title': article_list[i].title,
                               'updated': article_list[i].updated.strftime("%Y-%m-%d %H:%M:%S"),
                               'author': article_list[i].author.username,
-                              'body': article_list[i].body[:70], 'users_like': article_list[i].users_like.count()})
+                              'body': init_blog(article_list[i].body[:150]), 'users_like': article_list[i].users_like.count()})
     return HttpResponse(json.dumps({'code':201, 'data':articles_json, 'page_num':paginator.num_pages}))
 

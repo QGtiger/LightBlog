@@ -82,7 +82,7 @@ def article_post(request):
 
 @login_required(login_url='/account/login/')
 def article_list(request):
-    user = User.objects.get(username=request.session.get('username',''))
+    user = request.user
     articles_list = ArticlePost.objects.filter(author=user)
     paginator = Paginator(articles_list, 6)
     page = request.GET.get('page')
@@ -123,6 +123,7 @@ def del_article(request):
     except:
         return HttpResponse("2")
 
+
 @login_required(login_url='/account/login')
 @csrf_exempt
 def redit_article(request, article_id):
@@ -146,6 +147,7 @@ def redit_article(request, article_id):
             return HttpResponse("1")
         except:
             return HttpResponse("2")
+
 
 @login_required(login_url='/account/login')
 @require_POST

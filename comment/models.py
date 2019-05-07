@@ -15,6 +15,7 @@ class Comment_reply(models.Model):
     body = models.TextField('评论内容')
     reply_comment = models.IntegerField('评论评论的id', default=0)
     is_read = models.IntegerField(default=0)
+    is_deleted = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('-created',)

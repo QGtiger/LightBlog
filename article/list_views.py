@@ -9,8 +9,18 @@ from comment.models import Comment_reply
 from django.conf import settings
 import json
 import redis
-
+import re
 r = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
+
+
+def init_blog(content):
+    content_text1 = content.replace('<p>', '').replace('</p>', '').replace("'", '')
+    # 去掉图片链接
+    content_text2 = re.sub('(!\[.*?\]\(.*?\))', '', content_text1)
+    # 去掉markdown标签
+    pattern = '[\\\`\*\_\[\]\#\+\-\!\>]'
+    content_text3 = re.sub(pattern, '', content_text2)
+    return content_text3
 
 
 def article_titles(request):
@@ -37,7 +47,7 @@ def article_page(request):
         articles = current_page.object_list
     articles_json = []
     for i in range(len(articles)):
-        articles_json.append({'id':articles[i].id,'author':articles[i].author.username,'title':articles[i].title,'updated':articles[i].updated.strftime("%Y-%m-%d %H:%M:%S"),'body':articles[i].body[:70],'users_like':articles[i].users_like.count()})
+        articles_json.append({'id':articles[i].id,'author':articles[i].author.username,'title':articles[i].title,'updated':articles[i].updated.strftime("%Y-%m-%d %H:%M:%S"),'body': init_blog(articles[i].body[:150]), 'users_like':articles[i].users_like.count()})
     #return HttpResponse(serializers.serialize("json",articles))
     return HttpResponse(json.dumps({'static':200,'data':articles_json,'page_num':paginator.num_pages}))
 
@@ -47,7 +57,9 @@ def article_content(request, article_id):
     if request.method == 'POST':
         if request.user.username == "":
             return HttpResponse(json.dumps({'code': 502, 'tips':'What are u doing now??'}))
-        comment = request.POST.get('comment','')
+        comment = request.POST.get('comment', '')
+        if comment.strip() == '':
+            return HttpResponse(json.dumps({'code': 403, 'tips': '评论内容不能为空...'}))
         try:
             user = request.user
             article = get_object_or_404(ArticlePost, id=article_id)
@@ -85,6 +97,7 @@ def comment_like(request):
         except:
             return HttpResponse(json.dumps({'static':500,'tips':'系统错误,重新尝试'}))
 
+
 @csrf_exempt
 @require_POST
 def comment_delete(request):
@@ -92,7 +105,8 @@ def comment_delete(request):
     comment = Comment.objects.get(id=comment_id)
     try:
         if request.user == comment.commentator:
-            comment.delete()
+            comment.is_deleted = True
+            comment.save()
             return HttpResponse(json.dumps({'static':201, 'tips':'评论已删除'}))
         else:
             return HttpResponse(json.dumps({'static':502, 'tips':"You don't have permission.."}))
@@ -105,12 +119,12 @@ def init_data(data):
     list_data = []
     for item in items:
         if item.reply_type == 0:
-            list_data.append({'from': item.comment_user.username,'to':data.commentator.username , 'id': item.id, 'body': item.body,
+            list_data.append({'from': item.comment_user.username,'to':data.commentator.username , 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
                             'created': item.created.strftime("%Y-%m-%d %H:%M:%S")})
         else:
             to_id = item.reply_comment
             list_data.append(
-                {'from': item.comment_user.username, 'to': Comment_reply.objects.get(id=to_id).comment_user.username, 'id': item.id, 'body': item.body,
+                {'from': item.comment_user.username, 'to': Comment_reply.objects.get(id=to_id).comment_user.username, 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
                  'created': item.created.strftime("%Y-%m-%d %H:%M:%S")})
     return list_data
 
@@ -129,7 +143,7 @@ def comment_page(request, article_id):
     except EmptyPage:
         current_page = paginator.page(paginator.num_pages)
         comments = current_page.object_list
-    comments_list=[]
+    comments_list = []
     for item in comments:
-        comments_list.append({'id':item.id ,'commentator': item.commentator.username,'comment_reply':init_data(item) ,'created': item.created.strftime("%Y-%m-%d %H:%M:%S"), 'comment_like': item.comment_like.count(), 'body': item.body})
+        comments_list.append({'id': item.id, 'commentator': item.commentator.username,'comment_reply':init_data(item) ,'created': item.created.strftime("%Y-%m-%d %H:%M:%S"), 'comment_like': item.comment_like.count(), 'body': item.body if item.is_deleted is False else '评论已删除'})
     return HttpResponse(json.dumps({'code':200, 'res': comments_list, 'page_num': paginator.num_pages}))

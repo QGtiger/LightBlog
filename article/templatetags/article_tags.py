@@ -3,6 +3,7 @@ from django.db.models import Count
 from article.models import ArticlePost
 from django.conf import settings
 import redis
+import re
 register = template.Library()
 r = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 
@@ -36,3 +37,14 @@ def most_views():
     most_viewed = list(ArticlePost.objects.filter(id__in=article_ranking_ids))
     most_viewed.sort(key=lambda x: article_ranking_ids.index(x.id))
     return {'most_viewed': most_viewed}
+
+
+@register.filter
+def init_blog(content):
+    content_text1 = content.replace('<p>', '').replace('</p>', '').replace("'", '')
+    # 去掉图片链接
+    content_text2 = re.sub('(!\[.*?\]\(.*?\))', '', content_text1)
+    # 去掉markdown标签
+    pattern = '[\\\`\*\_\[\]\#\+\-\!\>]'
+    content_text3 = re.sub(pattern, '', content_text2)
+    return content_text3

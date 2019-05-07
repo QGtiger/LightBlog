@@ -62,7 +62,8 @@ def comment_reply_delete(request):
     comment_reply = Comment_reply.objects.get(id=id)
     try:
         if request.user == comment_reply.comment_user:
-            comment_reply.delete()
+            comment_reply.is_deleted = True
+            comment_reply.save()
             return HttpResponse(json.dumps({'code':201,'tips':'评论已删除'}))
         else:
             return HttpResponse(json.dumps({'code':502,'tips':'You do not have permission...'}))
@@ -75,12 +76,12 @@ def init_data(data):
     list_data = []
     for item in items:
         if item.reply_type == 0:
-            list_data.append({'from': item.comment_user.username,'to':data.commentator.username , 'id': item.id, 'body': item.body,
+            list_data.append({'from': item.comment_user.username,'to':data.commentator.username , 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
                             'created': item.created.strftime("%Y-%m-%d %H:%M:%S")})
         else:
             to_id = item.reply_comment
             list_data.append(
-                {'from': item.comment_user.username, 'to': Comment_reply.objects.get(id=to_id).comment_user.username, 'id': item.id, 'body': item.body,
+                {'from': item.comment_user.username, 'to': Comment_reply.objects.get(id=to_id).comment_user.username, 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
                  'created': item.created.strftime("%Y-%m-%d %H:%M:%S")})
     return list_data
 
@@ -90,7 +91,7 @@ def init_data(data):
 def comment_reply_get(request):
     id = request.POST.get('id','')
     comment = Comment.objects.get(id=id)
-    comment_root = {'id':comment.id, 'commentator': comment.commentator.username,'created': comment.created.strftime("%Y-%m-%d %H:%M:%S"), 'comment_like': comment.comment_like.count(), 'body': comment.body}
+    comment_root = {'id':comment.id, 'commentator': comment.commentator.username,'created': comment.created.strftime("%Y-%m-%d %H:%M:%S"), 'comment_like': comment.comment_like.count(), 'body': comment.body if comment.is_deleted is False else '评论已删除'}
     comment_child = init_data(comment)
     length = len(comment_child)
     return HttpResponse(json.dumps({'code':201,'comment_root': comment_root, 'comment_child': comment_child, 'nums':length}))
@@ -118,7 +119,8 @@ def notifications(request):
             comment.save()
             if user == comment.commentator:
                 continue
-            response.append({'commentator':comment.commentator.username, 'article_title': article.title, 'time': comment.created.strftime("%Y-%m-%d %H:%M:%S"), 'body': comment.body[:50], 'comment_root_id': comment.id, 'article_id': article.id})
+            if comment.is_deleted is False:
+                response.append({'commentator':comment.commentator.username, 'article_title': article.title, 'time': comment.created.strftime("%Y-%m-%d %H:%M:%S"), 'body': comment.body[:50], 'comment_root_id': comment.id, 'article_id': article.id})
     response.sort(key=lambda x: x['time'], reverse=True)
     nums = math.ceil(len(response)/6.0)
     if page > nums:
@@ -139,12 +141,12 @@ def is_read_comments(request):
                 comment.is_read = 1
                 comment.save()
                 continue
-            elif comment.is_read == 0:
+            elif comment.is_read == 0 and comment.is_deleted is False:
                 count += 1
     commented_comments = user.commented_user.all()
     commented_count = 0
     for comment in commented_comments:
-        if comment.is_read == 0:
+        if comment.is_read == 0 and comment.is_deleted is False:
             commented_count += 1
     return HttpResponse(json.dumps({'code':201, 'nums':count, 'commented_nums': commented_count}))
 
@@ -158,7 +160,8 @@ def comments(request):
     for comment in commenteds:
         comment.is_read = 1
         comment.save()
-        res.append({'commentator': comment.comment_user.username, 'article_title': comment.comment_reply.article.title, 'time': comment.created.strftime("%Y-%m-%d %H:%M:%S"), 'body': comment.body[:50],'comment_root_id': comment.comment_reply.id, 'comment_child_id': comment.id, 'article_id': comment.comment_reply.article.id})
+        if comment.is_deleted is False:
+            res.append({'commentator': comment.comment_user.username, 'article_title': comment.comment_reply.article.title, 'time': comment.created.strftime("%Y-%m-%d %H:%M:%S"), 'body': comment.body[:50],'comment_root_id': comment.comment_reply.id, 'comment_child_id': comment.id, 'article_id': comment.comment_reply.article.id})
     res.sort(key=lambda x: x['time'], reverse=True)
     return render(request, 'comment/comments.html', {'comments': res})
 

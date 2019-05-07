@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'account',
     'article',
     'chat',
-    'comment'
+    'comment',
 ]
 
 MIDDLEWARE = [
@@ -114,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai' # 设置时区为东八区
 

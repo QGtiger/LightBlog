@@ -6,12 +6,14 @@
   <li class="layui-nav-item">
     <a href="{% url 'chat:chat' %}">聊天室<span class="layui-badge-dot"></span></a>
   </li>
+  <li class="layui-nav-item">
+    <a href="{% url 'comment:message' %}">我的消息<span class="layui-badge read-comments-all" style="display:none"></span></a>
+  </li>
   <li class="layui-nav-item" lay-unselect="" style="float:right">
     <a href="javascript:;"><img id="avator" src="/media/avator/1554199336240.jpg" class="layui-nav-img avator">{{ request.user.username }}</a>
     <dl class="layui-nav-child">
-        {% if request.session.username %}
+        {% if request.user.username %}
       <dd><a href="{% url 'account:my_information' %}">个人信息</a></dd>
-      <dd><a href="{% url 'comment:message' %}">我的消息<span class="layui-badge read-comments-all" style="display:none"></span></a></dd>
       <dd><a href="{% url 'account:edit_myself' %}">完善信息</a></dd>
       <dd><a href="{% url 'account:account_setpassword' %}">修改密码</a></dd>
       <dd><a href="{% url 'article:article_column' %}">后台管理</a></dd>
