@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1zh-7=(@4hscap_nnd@jt3_*)-sc(aspcpfm5kwu@53zh5h@^_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,7 +42,20 @@ INSTALLED_APPS = [
     'article',
     'chat',
     'comment',
+    'django_celery_results'
 ]
+
+# 设置存储celery任务队列的Redis数据库
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+# 设置存储Celery 任务结果的数据库
+CELERY_RESULT_BACKEND = 'django-db' #这个就是django-db，django的命名规范
+
+# 设置定时任务的相关配置
+CELERY_ENABLE_UTC = False
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

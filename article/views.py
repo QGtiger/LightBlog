@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from .models import ArticleColumn,ArticlePost
 from .forms import ArticleColumnForm,ArticlePostForm
 from django.core.paginator import PageNotAnInteger,Paginator,EmptyPage
+from .tasks import *
 import json
 
 
@@ -63,15 +64,11 @@ def article_post(request):
     if request.method == 'POST':
         article_post_form = ArticlePostForm(data=request.POST)
         if article_post_form.is_valid():
-            cd = article_post_form.cleaned_data
-            try:
-                new_article = article_post_form.save(commit=False)
-                new_article.author = user
-                new_article.column = user.article_column.get(id=request.POST['column_id'])
-                new_article.save()
-                return HttpResponse('1')
-            except:
-                return HttpResponse('2')
+            title = request.POST['title']
+            body = request.POST['body']
+            column_id = request.POST['column_id']
+            article_post_task.delay(title, body, column_id, user.username)
+            return HttpResponse('1')
         else:
             return HttpResponse('3')
     else:
