@@ -29,7 +29,16 @@
     <!--{% include "paginator.html" %}-->
     <ul id="flow_demo" ></ul>
 
+<script src="{% static 'js/vue/vue-2.6.10.js' %}"></script>
+<script src="{% static 'js/vue/time.js' %}"></script>
 <script type="text/javascript">
+    var app = new Vue({
+        el: '#flow_demo',
+        data: {
+            test: 'test'
+        }
+    })
+
 	layui.use(['layer','flow'],function(){
 		var layer = layui.layer;
 		var flow = layui.flow;
@@ -55,7 +64,7 @@
                             '<p class="list-group-item-text">作者:'+res[i].author+'</p>'+
                             '<p class="list-group-item-text">概要:'+res[i].body+'</p>'+
                             '<p class="meta"><span><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
-                            '<span class="update_time">'+res[i].updated+'</span>'+
+                            '<span class="update_time" v-time="'+res[i].updated+'"></span>'+
                             '</p>'+
                         '</div>';
 

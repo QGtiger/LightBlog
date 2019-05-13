@@ -7,9 +7,11 @@ from django.views.decorators.http import require_POST
 from .models import ArticlePost,Comment
 from comment.models import Comment_reply
 from django.conf import settings
+from .tasks import *
 import json
 import redis
 import re
+import time
 r = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 
 
@@ -47,7 +49,7 @@ def article_page(request):
         articles = current_page.object_list
     articles_json = []
     for i in range(len(articles)):
-        articles_json.append({'id':articles[i].id,'author':articles[i].author.username,'title':articles[i].title,'updated':articles[i].updated.strftime("%Y-%m-%d %H:%M:%S"),'body': init_blog(articles[i].body[:150]), 'users_like':articles[i].users_like.count()})
+        articles_json.append({'id':articles[i].id,'author':articles[i].author.username,'title':articles[i].title,'updated':time.mktime(articles[i].updated.timetuple()),'body': init_blog(articles[i].body[:150]), 'users_like':articles[i].users_like.count()})
     #return HttpResponse(serializers.serialize("json",articles))
     return HttpResponse(json.dumps({'static':200,'data':articles_json,'page_num':paginator.num_pages}))
 
@@ -105,8 +107,7 @@ def comment_delete(request):
     comment = Comment.objects.get(id=comment_id)
     try:
         if request.user == comment.commentator:
-            comment.is_deleted = True
-            comment.save()
+            comment_delete_task.delay(comment_id)
             return HttpResponse(json.dumps({'static':201, 'tips':'评论已删除'}))
         else:
             return HttpResponse(json.dumps({'static':502, 'tips':"You don't have permission.."}))
