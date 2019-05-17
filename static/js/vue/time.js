@@ -32,7 +32,8 @@ var Time = {
         return date.getFullYear() + "-"+month+"-"+day;
     },
     //转换时间
-    getFormatTime: function(timestamp){
+    getFormatTime: function(time){
+        var timestamp = time * 1000;
         var now = this.getUnix();
         var today = this.getTodayUnix();
         var year = this.getYearUnix();
