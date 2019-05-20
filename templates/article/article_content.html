@@ -115,6 +115,7 @@
 <script src='{% static "editor/lib/jquery.flowchart.min.js" %}'></script>
 <script src='{% static "editor/editormd.js" %}'></script>
 <script src="{% static 'js/comment/comment.js' %}"></script>
+<script src="{% static 'js/vue/time.js' %}"></script>
 <script type="text/javascript">
 $(function(){
     editormd.markdownToHTML("editormd-view", {
@@ -143,7 +144,7 @@ function init_comment(items){
                 '<a href="/account/author/'+data.from+'" class="commentator-name">'+data.from+'</a>'+
                 '<span style="margin:0 10px">回复</span>'+
                 '<a href="/account/author/'+data.to+'">'+data.to+'</a>'+
-                '<span style="margin-left:20px">'+ data.created+'</span>'+
+                '<span style="margin-left:20px">'+ Time.getFormatTime(data.created)+'</span>'+
             '</div>'+
             '<div class="comment-wrap">'+
                 '<pre>'+data.body+'</pre>'+
@@ -188,7 +189,7 @@ layui.use(['layer', 'flow'], function(){
                         '</div>'+
                         '<div class="commentator-info">'+
                             '<a href="/account/author/'+comments[i].commentator+'" class="commentator-name">'+comments[i].commentator+'</a>'+
-                            '<span style="margin-left:20px">'+ comments[i].created+'</span>'+
+                            '<span style="margin-left:20px">'+ Time.getFormatTime(comments[i].created)+'</span>'+
                             '<span style="margin-left:20px"> 人气值: <span class="support-comment">'+comments[i].comment_like+'</span></span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
@@ -213,7 +214,7 @@ layui.use(['layer', 'flow'], function(){
                         '</div>'+
                         '<div class="commentator-info">'+
                             '<a href="/account/author/'+comments[i].commentator+'" class="commentator-name">'+comments[i].commentator+'</a>'+
-                            '<span style="margin-left:20px">'+ comments[i].created+'</span>'+
+                            '<span style="margin-left:20px">'+ Time.getFormatTime(comments[i].created)+'</span>'+
                             '<span style="margin-left:20px"> 人气值: <span class="support-comment">'+comments[i].comment_like+'</span></span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
@@ -309,7 +310,7 @@ $(document).ready(function(){
                             '<a href="/account/author/'+data.from+'" class="commentator-name">'+data.from+'</a>'+
                             '<span style="margin:0 10px">回复</span>'+
                             '<a href="/account/author/'+data.to+'">'+data.to+'</a>'+
-                            '<span style="margin-left:20px">'+ data.created+'</span>'+
+                            '<span style="margin-left:20px">'+ Time.getFormatTime(data.created)+'</span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
                             '<pre>'+data.body+'</pre>'+
@@ -354,7 +355,7 @@ $(document).ready(function(){
                         '</div>'+
                         '<div class="commentator-info">'+
                             '<a href="/account/author/'+comment_root.commentator+'" class="commentator-name">'+comment_root.commentator+'</a>'+
-                            '<span style="margin-left:20px">'+ comment_root.created+'</span>'+
+                            '<span style="margin-left:20px">'+ Time.getFormatTime(comment_root.created)+'</span>'+
                             '<span style="margin-left:20px"> 人气值: <span class="support-comment">'+comment_root.comment_like+'</span></span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
@@ -375,7 +376,7 @@ $(document).ready(function(){
                         '</div>'+
                         '<div class="commentator-info">'+
                             '<a href="/account/author/'+comment_root.commentator+'" class="commentator-name">'+comment_root.commentator+'</a>'+
-                            '<span style="margin-left:20px">'+ comment_root.created+'</span>'+
+                            '<span style="margin-left:20px">'+ Time.getFormatTime(comment_root.created)+'</span>'+
                             '<span style="margin-left:20px"> 人气值: <span class="support-comment">'+comment_root.comment_like+'</span></span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
@@ -556,7 +557,7 @@ $('.comment-btn').on('click',function(){
                     '</div>'+
                     '<div class="commentator-info">'+
                         '<a href="/account/author/'+commentator.commentator+'" class="commentator-name">'+commentator.commentator+'</a>'+
-                        '<span style="margin-left:20px">'+commentator.created+'</span>'+
+                        '<span style="margin-left:20px">'+Time.getFormatTime(commentator.created)+'</span>'+
                         '<span style="margin-left:20px"> 人气值: <span class="support-comment">0</span></span>'+
                     '</div>'+
                     '<div class="comment-wrap">'+

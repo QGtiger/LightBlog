@@ -27,7 +27,7 @@
                     '<a href="/account/author/'+data.from+'" class="commentator-name">'+data.from+'</a>'+
                     '<span style="margin:0 10px">回复</span>'+
                     '<a href="/account/author/'+data.to+'">'+data.to+'</a>'+
-                    '<span style="margin-left:20px">'+ data.created+'</span>'+
+                    '<span style="margin-left:20px">'+ Time.getFormatTime(data.created)+'</span>'+
                 '</div>'+
                 '<div class="comment-wrap">'+
                     '<pre>'+data.body+'</pre>'+
@@ -79,7 +79,7 @@
                                             '<span style="margin-left:30px">在文章</span>'+
                                             '<a href="/article/article_content/'+res[i].article_id+'">《'+res[i].article_title+'》</a>'+
                                             '<span> 中写了一条评论</span>'+
-                                            '<span style="margin-left:20px">'+ res[i].time+'</span>'+
+                                            '<span style="margin-left:20px">'+ Time.getFormatTime(res[i].time)+'</span>'+
                                         '</div>'+
                                         '<div class="comment-wrap">'+
                                             '<pre>'+res[i].body+'</pre>'+
@@ -168,7 +168,7 @@
                             '<a href="/account/author/'+data.from+'" class="commentator-name">'+data.from+'</a>'+
                             '<span style="margin:0 10px">回复</span>'+
                             '<a href="/account/author/'+data.to+'">'+data.to+'</a>'+
-                            '<span style="margin-left:20px">'+ data.created+'</span>'+
+                            '<span style="margin-left:20px">'+ Time.getFormatTime(data.created)+'</span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
                             '<pre>'+data.body+'</pre>'+
@@ -214,7 +214,7 @@
                         '</div>'+
                         '<div class="commentator-info">'+
                             '<a href="/account/author/'+comment_root.commentator+'" class="commentator-name">'+comment_root.commentator+'</a>'+
-                            '<span style="margin-left:20px">'+ comment_root.created+'</span>'+
+                            '<span style="margin-left:20px">'+ Time.getFormatTime(comment_root.created)+'</span>'+
                             '<span style="margin-left:20px"> 人气值: <span class="support-comment">'+comment_root.comment_like+'</span></span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
@@ -235,7 +235,7 @@
                         '</div>'+
                         '<div class="commentator-info">'+
                             '<a href="/account/author/'+comment_root.commentator+'" class="commentator-name">'+comment_root.commentator+'</a>'+
-                            '<span style="margin-left:20px">'+ comment_root.created+'</span>'+
+                            '<span style="margin-left:20px">'+ Time.getFormatTime(comment_root.created)+'</span>'+
                             '<span style="margin-left:20px"> 人气值: <span class="support-comment">'+comment_root.comment_like+'</span></span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+

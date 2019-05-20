@@ -67,7 +67,7 @@ def article_content(request, article_id):
             article = get_object_or_404(ArticlePost, id=article_id)
             C = Comment(article=article,commentator=user,body=comment)
             C.save()
-            comment_info = {'commentator':user.username,'id': C.id, 'body': C.body, 'created': C.created.strftime("%Y-%m-%d %H:%M:%S")}
+            comment_info = {'commentator':user.username,'id': C.id, 'body': C.body, 'created': time.mktime(C.created.timetuple())}
             return HttpResponse(json.dumps({"code":200,"tips":"感谢您的评论", 'comment_info':comment_info}))
         except:
             return HttpResponse(json.dumps({"code":501, "tips":"评论系统出现错误"}))
@@ -121,12 +121,12 @@ def init_data(data):
     for item in items:
         if item.reply_type == 0:
             list_data.append({'from': item.comment_user.username,'to':data.commentator.username , 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
-                            'created': item.created.strftime("%Y-%m-%d %H:%M:%S")})
+                            'created': time.mktime(item.created.timetuple())})
         else:
             to_id = item.reply_comment
             list_data.append(
                 {'from': item.comment_user.username, 'to': Comment_reply.objects.get(id=to_id).comment_user.username, 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
-                 'created': item.created.strftime("%Y-%m-%d %H:%M:%S")})
+                 'created': time.mktime(item.created.timetuple())})
     return list_data
 
 
@@ -146,5 +146,5 @@ def comment_page(request, article_id):
         comments = current_page.object_list
     comments_list = []
     for item in comments:
-        comments_list.append({'id': item.id, 'commentator': item.commentator.username,'comment_reply':init_data(item) ,'created': item.created.strftime("%Y-%m-%d %H:%M:%S"), 'comment_like': item.comment_like.count(), 'body': item.body if item.is_deleted is False else '评论已删除'})
+        comments_list.append({'id': item.id, 'commentator': item.commentator.username,'comment_reply':init_data(item) ,'created': time.mktime(item.created.timetuple()), 'comment_like': item.comment_like.count(), 'body': item.body if item.is_deleted is False else '评论已删除'})
     return HttpResponse(json.dumps({'code':200, 'res': comments_list, 'page_num': paginator.num_pages}))

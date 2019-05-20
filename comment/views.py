@@ -7,6 +7,7 @@ from article.models import Comment
 from .models import Comment_reply
 import json
 import math
+import time
 
 
 # Create your views here.
@@ -28,7 +29,7 @@ def comment_reply(request):
                 Com = Comment_reply(comment_reply=comment, comment_user=user, commented_user=comment.commentator, body=body)
                 Com.save()
                 comment_info = {'from': user.username,'to':comment.commentator.username , 'id': Com.id, 'body': Com.body,
-                                'created': Com.created.strftime("%Y-%m-%d %H:%M:%S")}
+                                'created': time.mktime(Com.created.timetuple())}
                 return HttpResponse(json.dumps({'code':203, 'tips':'评论成功', 'res':comment_info}))
             except:
                 return HttpResponse(json.dumps({"code": 501, "tips": "评论系统出现错误"}))
@@ -48,7 +49,7 @@ def comment_reply(request):
                 Com = Comment_reply(comment_reply=comment, reply_type=1, comment_user=user, reply_comment=id, commented_user=comment_reply.comment_user, body=body)
                 Com.save()
                 comment_info = {'from': user.username, 'to': comment_reply.comment_user.username, 'id': Com.id, 'body': Com.body,
-                                'created': Com.created.strftime("%Y-%m-%d %H:%M:%S")}
+                                'created': time.mktime(Com.created.timetuple())}
                 return HttpResponse(json.dumps({'code': 203, 'tips': '评论成功', 'res': comment_info}))
             except:
                 return HttpResponse(json.dumps({"code": 501, "tips": "评论系统出现错误"}))
@@ -77,12 +78,12 @@ def init_data(data):
     for item in items:
         if item.reply_type == 0:
             list_data.append({'from': item.comment_user.username,'to':data.commentator.username , 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
-                            'created': item.created.strftime("%Y-%m-%d %H:%M:%S")})
+                            'created': time.mktime(item.created.timetuple())})
         else:
             to_id = item.reply_comment
             list_data.append(
                 {'from': item.comment_user.username, 'to': Comment_reply.objects.get(id=to_id).comment_user.username, 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
-                 'created': item.created.strftime("%Y-%m-%d %H:%M:%S")})
+                 'created': time.mktime(item.created.timetuple())})
     return list_data
 
 
@@ -91,7 +92,7 @@ def init_data(data):
 def comment_reply_get(request):
     id = request.POST.get('id','')
     comment = Comment.objects.get(id=id)
-    comment_root = {'id':comment.id, 'commentator': comment.commentator.username,'created': comment.created.strftime("%Y-%m-%d %H:%M:%S"), 'comment_like': comment.comment_like.count(), 'body': comment.body if comment.is_deleted is False else '评论已删除'}
+    comment_root = {'id':comment.id, 'commentator': comment.commentator.username,'created': time.mktime(comment.created.timetuple()), 'comment_like': comment.comment_like.count(), 'body': comment.body if comment.is_deleted is False else '评论已删除'}
     comment_child = init_data(comment)
     length = len(comment_child)
     return HttpResponse(json.dumps({'code':201,'comment_root': comment_root, 'comment_child': comment_child, 'nums':length}))
@@ -120,7 +121,7 @@ def notifications(request):
             if user == comment.commentator:
                 continue
             if comment.is_deleted is False:
-                response.append({'commentator':comment.commentator.username, 'article_title': article.title, 'time': comment.created.strftime("%Y-%m-%d %H:%M:%S"), 'body': comment.body[:50], 'comment_root_id': comment.id, 'article_id': article.id})
+                response.append({'commentator':comment.commentator.username, 'article_title': article.title, 'time': time.mktime(comment.created.timetuple()), 'body': comment.body[:50], 'comment_root_id': comment.id, 'article_id': article.id})
     response.sort(key=lambda x: x['time'], reverse=True)
     nums = math.ceil(len(response)/6.0)
     if page > nums:
@@ -161,7 +162,7 @@ def comments(request):
         comment.is_read = 1
         comment.save()
         if comment.is_deleted is False:
-            res.append({'commentator': comment.comment_user.username, 'article_title': comment.comment_reply.article.title, 'time': comment.created.strftime("%Y-%m-%d %H:%M:%S"), 'body': comment.body[:50],'comment_root_id': comment.comment_reply.id, 'comment_child_id': comment.id, 'article_id': comment.comment_reply.article.id})
+            res.append({'commentator': comment.comment_user.username, 'article_title': comment.comment_reply.article.title, 'time': time.mktime(comment.created.timetuple()), 'body': comment.body[:50],'comment_root_id': comment.comment_reply.id, 'comment_child_id': comment.id, 'article_id': comment.comment_reply.article.id})
     res.sort(key=lambda x: x['time'], reverse=True)
     return render(request, 'comment/comments.html', {'comments': res})
 
