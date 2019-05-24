@@ -6,17 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}</title>
-
-    <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    {% block link %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/article_titles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/article_comment.css' %}">
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/layui.css' %}">
-    <link rel="stylesheet" href="{% static 'css/ImgCropping.css' %}">
-    <link rel="stylesheet" href="{% static 'css/cropper.min.css' %}">
-    <script src="{% static 'js/cropper.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/layui.js' %}"></script>
     <link rel="shortcut icon" href="/media/avator/favicon.ico" />
 </head>
 <body>

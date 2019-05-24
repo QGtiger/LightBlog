@@ -1,6 +1,11 @@
 {% extends "article/base.html" %}
 {% load staticfiles %}
 {% block title %} 文章栏目 {% endblock %}
+
+{% block link %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/layui.css' %}">
+{% endblock %}
+
 {% block content %}
 <div>
     <p class="text-right">
@@ -39,9 +44,12 @@
 </div>
 
 
+{% endblock %}
 
+{% block javascript %}
 <script type="text/javascript" src='{% static "js/jquery.js" %}'></script>
 <script type="text/javascript" src="{% static 'js/layer.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/layui.js' %}"></script>
 <script type="text/javascript">
     $('.edit_btn').hover(function(){
         $(this).toggleClass('btn-hover');
@@ -131,4 +139,5 @@
         });
     }
 </script>
+
 {% endblock %}

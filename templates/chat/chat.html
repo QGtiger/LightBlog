@@ -2,8 +2,12 @@
 {% load staticfiles %}
 {% block title %}Chat room{% endblock %}
 
+{% block link %}
+<link rel="stylesheet" href="{% static 'css/chat/chat.css' %}">
+{% endblock %}
+
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/chat/chat.css' %}">
+
 
 <!--聊天部分，最初是隐藏掉的-->
 <div class="chat-container">
@@ -15,7 +19,11 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascript %}
 <script src="{% static 'js/chat/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layer.js'%}"></script>
 <script src="{% static 'js/chat/socket.io.js' %}"></script>
 <script src="{% static 'js/chat/chat-room.js' %}"></script>
 {% endblock %}

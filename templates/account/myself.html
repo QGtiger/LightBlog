@@ -3,6 +3,10 @@
 {% load staticfiles %}
 {% block title %}{{ title }}{% endblock %}
 
+{% block link %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/layui.css' %}">
+{% endblock %}
+
 {% block content %}
 
 
@@ -69,8 +73,12 @@
         <ul class="layui-tab-item" id="flow_article"></ul>
     </div>
 </div>
+{% endblock %}
 
-
+{% block javascript %}
+<script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layui.js' %}"></script>
 <script type="text/javascript">
 	layui.use(['layer','flow','element'],function(){
 		var layer = layui.layer;
@@ -153,5 +161,4 @@
         $('#my_photo').attr('src',$('#my_photo').attr('src')+'?'+Math.random())
     })
 </script>
-
 {% endblock %}

@@ -2,6 +2,9 @@
 {% load article_tags %}
 {% load staticfiles %}
 {% block title %} 博客首页 {% endblock %}
+{% block link %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/layui.css' %}">
+{% endblock %}
 {% block content %}
 
 <div class="container">
@@ -30,7 +33,13 @@
     <ul id="flow_demo" >
     </ul>
 
-<script src="{% static 'js/vue/vue-2.6.10.js' %}"></script>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layui.js' %}"></script>
 <script src="{% static 'js/vue/time.js' %}"></script>
 <script type="text/javascript">
 
@@ -74,5 +83,4 @@
 		})
 	})
 </script>
-</div>
 {% endblock %}

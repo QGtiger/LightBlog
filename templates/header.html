@@ -1,7 +1,9 @@
 {% load staticfiles %}
+{% load article_tags %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/layui.css' %}">
 <ul class="layui-nav header" >
   <li class="layui-nav-item">
-    <a href="{% url 'article:article_titles' %}">博客首页<span class="layui-badge">9</span></a>
+    <a href="{% url 'article:article_titles' %}">博客首页<span class="layui-badge">{% total_articles %}</span></a>
   </li>
   <li class="layui-nav-item">
     <a href="{% url 'chat:chat' %}">聊天室  <i class="layui-icon layui-icon-group"></i><span class="layui-badge-dot"></span></a>
@@ -26,6 +28,8 @@
   </li>
 </ul>
 
+<script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layui.js' %}"></script>
 <script>
 
     layui.use('element', function(){

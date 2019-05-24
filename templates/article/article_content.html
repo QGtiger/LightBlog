@@ -2,6 +2,10 @@
 {% load  article_tags %}
 {% load staticfiles %}
 {% block title %} {{ article.title }} {% endblock %}
+{% block link %}
+<link rel="stylesheet" href="{% static 'css/article_comment.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/layui.css' %}">
+{% endblock %}
 {% block content %}
 
 {% with total_likes=article.users_like.count %}
@@ -105,6 +109,10 @@
     </div>
 </div>
 
+{% endwith %}
+{% endblock %}
+
+{% block javascript %}
 <script src='{% static "js/jquery.js" %}'></script>
 <script src='{% static "editor/lib/marked.min.js" %}'></script>
 <script src='{% static "editor/lib/prettify.min.js" %}'></script>
@@ -115,6 +123,8 @@
 <script src='{% static "editor/lib/jquery.flowchart.min.js" %}'></script>
 <script src='{% static "editor/editormd.js" %}'></script>
 <script src="{% static 'js/comment/comment.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layui.js' %}"></script>
 <script src="{% static 'js/vue/time.js' %}"></script>
 <script type="text/javascript">
 $(function(){
@@ -581,5 +591,5 @@ $('.comment-btn').on('click',function(){
     }
 })
 </script>
-{% endwith %}
+
 {% endblock %}

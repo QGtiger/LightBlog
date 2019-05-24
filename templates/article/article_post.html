@@ -1,6 +1,13 @@
 {% extends "article/base.html" %}
 {% load staticfiles %}
 {% block title %} 文章发布 {% endblock %}
+
+{% block link %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/layui.css' %}">
+<link rel="stylesheet" href="{% static 'editor/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'editor/css/editormd.css' %}">
+{% endblock %}
+
 {% block content %}
 
 <div style="margin-left:10px">
@@ -43,6 +50,13 @@
     </form>
 </div>
 
+
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/layui.js' %}"></script>
 <script type="text/javascript">
 layui.use('form');
 
@@ -78,8 +92,6 @@ function publish_article(){
 }
 
 </script>
-<link rel="stylesheet" href="{% static 'editor/css/style.css' %}">
-<link rel="stylesheet" href="{% static 'editor/css/editormd.css' %}">
 <script type="text/javascript" src='{% static "editor/editormd.min.js" %}'></script>
 <script type="text/javascript">
     $(function() {
