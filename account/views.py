@@ -189,6 +189,15 @@ def my_image(request):
     if request.method == 'POST':
         uploadimg = request.FILES.get('uploadimg', '')
         userinfo = UserInfo.objects.get(user=request.user)
+        avatorInfo = str(userinfo.photo).split('/')
+        if avatorInfo[0] == 'default':
+            pass
+        else:
+            if avatorInfo[1] == username+'.jpg':
+                pass
+            else:
+                fname = '{}/{}'.format(settings.MEDIA_ROOT,str(userinfo.photo))
+                os.remove(fname)
         try:
             userinfo.photo.save(username + '.jpg', uploadimg)
             return HttpResponse(json.dumps({'status':200,'tips':'上传成功','photo':userinfo.photo.url}))
