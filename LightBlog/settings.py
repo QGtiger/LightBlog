@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '1zh-7=(@4hscap_nnd@jt3_*)-sc(aspcpfm5kwu@53zh5h@^_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'article',
     'chat',
     'comment',
-    'django_celery_results'
+    'django_celery_results',
+    'imagekit', # django-imagekit
 ]
 
 # 设置存储celery任务队列的Redis数据库
@@ -142,15 +143,15 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
+# STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'media'),
-    # os.path.join(BASE_DIR,'static')
+    os.path.join(BASE_DIR,'static')
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
-#MEDIA_URL = '/media/'
+MEDIA_URL = '/media/'
 
 
 # 邮箱配置信息

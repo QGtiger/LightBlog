@@ -120,12 +120,12 @@ def init_data(data):
     list_data = []
     for item in items:
         if item.reply_type == 0:
-            list_data.append({'from': item.comment_user.username,'to':data.commentator.username , 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
+            list_data.append({'from': item.comment_user.username,'from_img_url':item.comment_user.userinfo.photo_150x150.url, 'to':data.commentator.username , 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
                             'created': time.mktime(item.created.timetuple())})
         else:
             to_id = item.reply_comment
             list_data.append(
-                {'from': item.comment_user.username, 'to': Comment_reply.objects.get(id=to_id).comment_user.username, 'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
+                {'from': item.comment_user.username,'from_img_url':item.comment_user.userinfo.photo_150x150.url, 'to': Comment_reply.objects.get(id=to_id).comment_user.username,'id': item.id, 'body': item.body if item.is_deleted is False else '评论已删除',
                  'created': time.mktime(item.created.timetuple())})
     return list_data
 
@@ -146,5 +146,5 @@ def comment_page(request, article_id):
         comments = current_page.object_list
     comments_list = []
     for item in comments:
-        comments_list.append({'id': item.id, 'commentator': item.commentator.username,'comment_reply':init_data(item) ,'created': time.mktime(item.created.timetuple()), 'comment_like': item.comment_like.count(), 'body': item.body if item.is_deleted is False else '评论已删除'})
+        comments_list.append({'id': item.id, 'commentator': item.commentator.username,'commentator_img_url': item.commentator.userinfo.photo_150x150.url, 'comment_reply':init_data(item), 'created': time.mktime(item.created.timetuple()), 'comment_like': item.comment_like.count(), 'body': item.body if item.is_deleted is False else '评论已删除'})
     return HttpResponse(json.dumps({'code':200, 'res': comments_list, 'page_num': paginator.num_pages}))

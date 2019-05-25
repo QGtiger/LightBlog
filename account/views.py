@@ -16,6 +16,7 @@ from article.list_views import init_blog
 from .forms import *
 import json
 import shutil
+import os
 
 
 # Create your views here.
@@ -78,9 +79,6 @@ def account_register(request):
             user.save()
             UserInfo.objects.create(user=user)
             login(request, user)
-            default_img = '{}/avator/{}.jpg'.format(settings.MEDIA_ROOT, '1554199336240')
-            avator_img = '{}/avator/{}.jpg'.format(settings.MEDIA_ROOT, username)
-            shutil.copy(default_img,avator_img)
             # return redirect('/blog/')
             return HttpResponse(json.dumps({'status':5,'tips':' 注册成功,直接登录 '}))
             # tips = ' 注册成功 '
@@ -183,6 +181,7 @@ def myself_edit(request):
     else:
         return render(request,"account/edit_myself.html",locals())
 
+
 @login_required(login_url='/account/login/')
 @csrf_exempt
 def my_image(request):
@@ -190,14 +189,9 @@ def my_image(request):
     if request.method == 'POST':
         uploadimg = request.FILES.get('uploadimg', '')
         userinfo = UserInfo.objects.get(user=request.user)
-        userinfo.photo = username+'.jpg'
-        userinfo.save()
-        fname = '{}/avator/{}.jpg'.format(settings.MEDIA_ROOT, username)
         try:
-            with open(fname,'wb') as f:
-                for c in uploadimg.chunks():
-                    f.write(c)
-            return HttpResponse(json.dumps({'status':200,'tips':'上传成功','photo':'/media/avator/{}.jpg'.format(username)}))
+            userinfo.photo.save(username + '.jpg', uploadimg)
+            return HttpResponse(json.dumps({'status':200,'tips':'上传成功','photo':userinfo.photo.url}))
         except:
             return HttpResponse(json.dumps({'status':500,'tips':'上传失败'}))
     else:

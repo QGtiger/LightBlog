@@ -12,7 +12,11 @@
     <a href="{% url 'comment:message' %}">我的消息  <i class="layui-icon layui-icon-reply-fill"></i><span class="layui-badge read-comments-all" style="display:none"></span></a>
   </li>
   <li class="layui-nav-item" lay-unselect="" style="float:right">
-    <a href="javascript:;"><img id="avator" src="/media/avator/1554199336240.jpg" class="layui-nav-img avator">{{ request.user.username }}</a>
+    {% if request.user.username %}
+    <a href="javascript:;"><img id="avator" src="{{ request.user.userinfo.photo_150x150.url }}" class="layui-nav-img avator">{{ request.user.username }}</a>
+    {% else %}
+    <a href="javascript:;"><img id="avator" src="/media/avator/default.jpg" class="layui-nav-img avator">{{ request.user.username }}</a>
+    {% endif %}
     <dl class="layui-nav-child">
         {% if request.user.username %}
       <dd><a href="{% url 'account:my_information' %}"><i class="layui-icon layui-icon-username"></i>  个人信息</a></dd>
@@ -45,7 +49,6 @@
 	$(function(){
 	    username = $('.username').val()
 	    if(username){
-	        $('.avator').attr('src','/media/avator/'+username+'.jpg?'+Math.random())
             $.get('/comment/is_read_comments', function(e){
                 res = JSON.parse(e)
                 nums = res.nums
@@ -59,8 +62,6 @@
                     $('.read-commented').text(commented_nums)
                 }
             })
-	    }else{
-	        $('.avator').attr('src','/media/avator/1554199336240.jpg?'+Math.random())
 	    }
 	})
 

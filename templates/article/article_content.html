@@ -61,11 +61,7 @@
     <div class="comment">
         <form action="" method="POST">{% csrf_token %}
         <div class="layui-form-label " style="height:80px">
-            {% if request.user.username %}
-            <img src="/media/avator/{{ request.user.username }}.jpg" class="layui-nav-img">
-            {% else %}
-            <img src="/media/avator/1554199539806.jpg" class="layui-nav-img">
-            {% endif %}
+            <img src="{{ request.user.userinfo.photo_150x150.url }}" class="layui-nav-img">
         </div>
     <div class="layui-input-block">
       <textarea placeholder="请输入内容" class="layui-textarea comment_text" style="resize:none"></textarea>
@@ -147,7 +143,7 @@ function init_comment(items){
         item = '<div class="commentator commentator-child" id="comment-child-'+data.id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
             '<div class="commentator-img">'+
                 '<a href="/account/author/'+data.from+'">'+
-                    '<img src="/media/avator/'+data.from+'.jpg" class="layui-nav-img" alt="">'+
+                    '<img src="'+data.from_img_url+'" class="layui-nav-img" alt="">'+
                 '</a>'+
             '</div>'+
             '<div class="commentator-info">'+
@@ -194,7 +190,7 @@ layui.use(['layer', 'flow'], function(){
                     '<div class="commentator commentator-root" id="comment-root-'+comments[i].id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
                         '<div class="commentator-img">'+
                             '<a href="/account/author/'+comments[i].commentator+'">'+
-                                '<img src="/media/avator/'+comments[i].commentator+'.jpg" class="layui-nav-img" alt="">'+
+                                '<img src="'+comments[i].commentator_img_url+'" class="layui-nav-img" alt="">'+
                             '</a>'+
                         '</div>'+
                         '<div class="commentator-info">'+
@@ -219,7 +215,7 @@ layui.use(['layer', 'flow'], function(){
                     '<div class="commentator commentator-root" id="comment-root-'+comments[i].id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
                         '<div class="commentator-img">'+
                             '<a href="/account/author/'+comments[i].commentator+'">'+
-                                '<img src="/media/avator/'+comments[i].commentator+'.jpg" class="layui-nav-img" alt="">'+
+                                '<img src="'+comments[i].commentator_img_url+'" class="layui-nav-img" alt="">'+
                             '</a>'+
                         '</div>'+
                         '<div class="commentator-info">'+
@@ -313,7 +309,7 @@ $(document).ready(function(){
                         item = '<div class="commentator commentator-child" id="comment-child-'+data.id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
                         '<div class="commentator-img">'+
                             '<a href="/account/author/'+data.from+'">'+
-                                '<img src="/media/avator/'+data.from+'.jpg" class="layui-nav-img" alt="">'+
+                                '<img src="'+data.from_img_url+'" class="layui-nav-img" alt="">'+
                             '</a>'+
                         '</div>'+
                         '<div class="commentator-info">'+
@@ -360,7 +356,7 @@ $(document).ready(function(){
                     '<div class="commentator commentator-root" id="comment-root-'+comment_root.id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
                         '<div class="commentator-img">'+
                             '<a href="/account/author/'+comment_root.commentator+'">'+
-                                '<img src="/media/avator/'+comment_root.commentator+'.jpg" class="layui-nav-img" alt="">'+
+                                '<img src="'+comment_root.commentator_img_url+'" class="layui-nav-img" alt="">'+
                             '</a>'+
                         '</div>'+
                         '<div class="commentator-info">'+
@@ -381,7 +377,7 @@ $(document).ready(function(){
                     '<div class="commentator commentator-root" id="comment-root-'+comment_root.id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
                         '<div class="commentator-img">'+
                             '<a href="/account/author/'+comment_root.commentator+'">'+
-                                '<img src="/media/avator/'+comment_root.commentator+'.jpg" class="layui-nav-img" alt="">'+
+                                '<img src="'+comment_root.commentator_img_url+'" class="layui-nav-img" alt="">'+
                             '</a>'+
                         '</div>'+
                         '<div class="commentator-info">'+

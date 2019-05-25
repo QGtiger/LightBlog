@@ -20,7 +20,7 @@
             item = '<div class="commentator commentator-child" id="comment-child-'+data.id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
                 '<div class="commentator-img">'+
                     '<a href="/account/author/'+data.from+'">'+
-                        '<img src="/media/avator/'+data.from+'.jpg" class="layui-nav-img" alt="">'+
+                        '<img src="'+data.from_img_url+'" class="layui-nav-img" alt="">'+
                     '</a>'+
                 '</div>'+
                 '<div class="commentator-info">'+
@@ -71,7 +71,7 @@
                                     '<div class="commentator commentator-root" id="comment-root-'+res[i].comment_root_id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
                                         '<div class="commentator-img">'+
                                             '<a href="/account/author/'+res[i].commentator+'">'+
-                                                '<img src="/media/avator/'+res[i].commentator+'.jpg" class="layui-nav-img" alt="">'+
+                                                '<img src="'+res[i].commentator_img_url+'" class="layui-nav-img" alt="">'+
                                             '</a>'+
                                         '</div>'+
                                         '<div class="commentator-info">'+
@@ -161,7 +161,7 @@
                         item = '<div class="commentator commentator-child" id="comment-child-'+data.id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
                         '<div class="commentator-img">'+
                             '<a href="/account/author/'+data.from+'">'+
-                                '<img src="/media/avator/'+data.from+'.jpg" class="layui-nav-img" alt="">'+
+                                '<img src="'+data.from_img_url+'" class="layui-nav-img" alt="">'+
                             '</a>'+
                         '</div>'+
                         '<div class="commentator-info">'+
@@ -209,7 +209,7 @@
                     '<div class="commentator commentator-root" id="comment-root-'+comment_root.id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
                         '<div class="commentator-img">'+
                             '<a href="/account/author/'+comment_root.commentator+'">'+
-                                '<img src="/media/avator/'+comment_root.commentator+'.jpg" class="layui-nav-img" alt="">'+
+                                '<img src="'+comment_root.commentator_img_url+'" class="layui-nav-img" alt="">'+
                             '</a>'+
                         '</div>'+
                         '<div class="commentator-info">'+
@@ -230,7 +230,7 @@
                     '<div class="commentator commentator-root" id="comment-root-'+comment_root.id+'" onmouseenter="EnterFunction(this)" onmouseleave="LeaveFunction(this)">'+
                         '<div class="commentator-img">'+
                             '<a href="/account/author/'+comment_root.commentator+'">'+
-                                '<img src="/media/avator/'+comment_root.commentator+'.jpg" class="layui-nav-img" alt="">'+
+                                '<img src="'+comment_root.commentator_img_url+'" class="layui-nav-img" alt="">'+
                             '</a>'+
                         '</div>'+
                         '<div class="commentator-info">'+

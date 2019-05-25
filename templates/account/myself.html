@@ -54,11 +54,7 @@
 
         <div class="layui-col-xs12 layui-col-md4" style="display:flex;justify-content:center;padding-top:20px">
             <div style="width:200px">
-                {% if userinfo.photo %}
-                <img src="/media/avator/{{ userinfo.photo | striptags }}" class="layui-circle" id="my_photo" style="width:200px;height:200px;padding-bottom:10px">
-                {% else %}
-                <img name="user_face" src="/media/avator/1554199336240.jpg" class="layui-circle" style="width:200px;height:200px;padding-bottom:10px" id="my_photo">
-                {% endif %}
+                <img src="{{ userinfo.photo.url }}" class="layui-circle" id="my_photo" style="width:200px;height:200px;padding-bottom:10px">
             </div>
         </div>
     </div>
