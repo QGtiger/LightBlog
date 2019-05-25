@@ -15,7 +15,7 @@
     {% if request.user.username %}
     <a href="javascript:;"><img id="avator" src="{{ request.user.userinfo.photo_150x150.url }}" class="layui-nav-img avator">{{ request.user.username }}</a>
     {% else %}
-    <a href="javascript:;"><img id="avator" src="/media/avator/default.jpg" class="layui-nav-img avator">{{ request.user.username }}</a>
+    <a href="javascript:;"><img id="avator" src="/media/default/default.jpg" class="layui-nav-img avator">{{ request.user.username }}</a>
     {% endif %}
     <dl class="layui-nav-child">
         {% if request.user.username %}

@@ -12,7 +12,7 @@ class UserInfo(models.Model):
     profession = models.CharField(' 工作 ',max_length=100,blank=True)
     address = models.CharField(' 地址 ',max_length=100,blank=True)
     aboutme = models.TextField(' 自我介绍 ',blank=True)
-    photo = models.ImageField(' 头像 ',upload_to='avator', default='avator/1554199336240.jpg')
+    photo = models.ImageField(' 头像 ',upload_to='avator', default='default/default.jpg')
 
     # 注意：ImageSpecField不会生成数据库中的表
     # 处理后的图片

@@ -206,9 +206,9 @@ def get_avator(request):
         userinfo = UserInfo.objects.get(user=user)
         print(userinfo.photo)
         if userinfo.photo:
-            return HttpResponse(json.dumps({'static':200,'photo':'/media/avator/{}'.format(userinfo.photo)}))
+            return HttpResponse(json.dumps({'static':200,'photo':userinfo.photo.url}))
         else:
-            return HttpResponse(json.dumps({'static':201,'photo':'/media/avator/1554199336240.jpg'}))
+            return HttpResponse(json.dumps({'static':201,'photo':'/media/default/default.jpg'}))
     except:
         return HttpResponse(json.dumps({'static':500,'tips':'Something error'}))
 
