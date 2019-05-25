@@ -206,6 +206,7 @@ def my_image(request):
     else:
         return HttpResponse("该页面摸得GET")
 
+
 @login_required(login_url='/account/login/')
 @csrf_exempt
 @require_POST
