@@ -67,7 +67,7 @@ def article_content(request, article_id):
             article = get_object_or_404(ArticlePost, id=article_id)
             C = Comment(article=article,commentator=user,body=comment)
             C.save()
-            comment_info = {'commentator':user.username,'id': C.id, 'body': C.body, 'created': time.mktime(C.created.timetuple())}
+            comment_info = {'commentator':user.username,'commentator_img_url':user.userinfo.photo_150x150.url, 'id': C.id, 'body': C.body, 'created': time.mktime(C.created.timetuple())}
             return HttpResponse(json.dumps({"code":200,"tips":"感谢您的评论", 'comment_info':comment_info}))
         except:
             return HttpResponse(json.dumps({"code":501, "tips":"评论系统出现错误"}))

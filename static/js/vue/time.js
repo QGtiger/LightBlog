@@ -24,6 +24,13 @@ var Time = {
         date.setDate(1);
         return date.getTime();
     },
+    //获取月日
+    getMonthDate: function(timestamp){
+        var date = new Date(timestamp);
+        var month = date.getMonth() + 1<10?'0'+(date.getMonth() + 1):date.getMonth() + 1;
+        var day = date.getDate() <10?'0'+date.getDate():date.getDate();
+        return month+"-"+day;
+    },
     //获取标准年月日
     getLastDate: function(timestamp){
         var date = new Date(timestamp);
@@ -47,6 +54,8 @@ var Time = {
             tips = Math.floor(timer/3600)+'小时前';
         }else if(timer/86400<=31){
             tips = Math.ceil(timer/86400)+'天前';
+        }else if(timer/86400>31 && (timestamp-year>=0)){
+            tips = this.getMonthDate(timestamp);
         }else{
             tips = this.getLastDate(timestamp);
         }

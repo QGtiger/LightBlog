@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+from imagekit.models import ProcessedImageField
 
 
 # Create your models here.
@@ -16,10 +17,11 @@ class UserInfo(models.Model):
     profession = models.CharField(' 工作 ', max_length=100, blank=True)
     address = models.CharField(' 地址 ', max_length=100, blank=True)
     aboutme = models.TextField(' 自我介绍 ', blank=True)
-    photo = models.ImageField(
-        ' 头像 ',
+    photo = ProcessedImageField(
         upload_to='avator',
-        default='default/default.jpg')
+        processors=[ResizeToFill(400, 400)],
+        format='JPEG',
+        options={'quality':98}, verbose_name='展示图片')
 
     # 注意：ImageSpecField不会生成数据库中的表
     # 处理后的图片
