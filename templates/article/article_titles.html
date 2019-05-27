@@ -8,30 +8,24 @@
 {% block content %}
 
 <div class="container">
-    <h1 style="text-align:center">丰富头脑，善化行为</h1>
-    <p>There are {% total_articles %}  articles which you can read.</p>
+    <!--<h1 style="text-align:center">丰富头脑，善化行为</h1>-->
 
-    <div class="article_ranking" style="margin:20px 40px">
-        <h3>最受欢迎文章</h3>
-        <ol>
-            {% for article in most_viewed %}
-            <li><a href="{% url 'article:article_content' article.id %}">{{ forloop.counter }}. {{ article.title }}</a></li>
-            {% endfor %}
-        </ol>
+    <div class="layui-row">
+        <div class="layui-col-xs12 layui-col-md8 article-titles">
+            {% carousel_img %}
+            <ul id="flow_demo" ></ul>
+        </div>
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="article_ranking" style="margin:20px 40px">
+                <h3>最受欢迎文章</h3>
+                <ol>
+                    {% for article in most_viewed %}
+                    <li><a href="{% url 'article:article_content' article.id %}">{{ forloop.counter }}. {{ article.title }}</a></li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
     </div>
-
-    <!--{% for article in articles %}-->
-    <!--<div class="list-group">-->
-        <!--<a href="{% url 'article:article_content' article.id %}" class="list-group-item active">-->
-            <!--<h3 class="list-group-item-heading">{{article.title}}</h3>-->
-        <!--</a>-->
-        <!--<p class="list-group-item-text">作者:{{article.author.username}}</p>-->
-        <!--<p class="list-group-item-text">概要:{{article.body|slice:'70'| linebreaks}}</p>-->
-    <!--</div>-->
-    <!--{% endfor %}-->
-    <!--{% include "paginator.html" %}-->
-    <ul id="flow_demo" >
-    </ul>
 
 </div>
 {% endblock %}
@@ -42,11 +36,27 @@
 <script type="text/javascript" src="{% static 'js/layui.js' %}"></script>
 <script src="{% static 'js/vue/time.js' %}"></script>
 <script type="text/javascript">
+    var Carousel = $('#Carousel');
+    var width = Carousel.width();
+    Carousel.height(0.42*width);
+    window.onresize = function(){
+        var Carousel = $('#Carousel');
+        var width = Carousel.width();
+        Carousel.height(0.432*width);
+    }
 
-	layui.use(['layer','flow'],function(){
+	layui.use(['layer','flow','carousel'],function(){
 		var layer = layui.layer;
 		var flow = layui.flow;
-
+        var carousel = layui.carousel
+          //图片轮播
+          carousel.render({
+            elem: '#Carousel'
+            ,anim: 'fade'
+            ,width: '100%'
+            ,height: this.width*0.4
+            ,interval: 5000
+          });
 		flow.load({
 			elem: "#flow_demo",
 			is_Auto:true,

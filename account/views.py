@@ -197,7 +197,10 @@ def my_image(request):
                 pass
             else:
                 fname = '{}/{}'.format(settings.MEDIA_ROOT,str(userinfo.photo))
-                os.remove(fname)
+                try:
+                    os.remove(fname)
+                except Exception as e:
+                    print(e)
         try:
             userinfo.photo.save(username + '.jpg', uploadimg)
             return HttpResponse(json.dumps({'status':200,'tips':'上传成功','photo':userinfo.photo.url}))

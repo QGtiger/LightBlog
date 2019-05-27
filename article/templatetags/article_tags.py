@@ -4,6 +4,7 @@ from article.models import ArticlePost
 from django.conf import settings
 import redis
 import re
+from article.models import Carousel
 register = template.Library()
 r = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
 
@@ -26,7 +27,8 @@ def latest_articles(n=5):
 
 @register.simple_tag
 def most_commented_articles(n=5):
-    return ArticlePost.objects.annotate(total_comments=Count('comments')).order_by('-total_comments')[:n]
+    return ArticlePost.objects.annotate(total_comments=Count(
+        'comments')).order_by('-total_comments')[:n]
 
 
 @register.inclusion_tag('article/list/most_views.html')
@@ -41,10 +43,22 @@ def most_views():
 
 @register.filter
 def init_blog(content):
-    content_text1 = content.replace('<p>', '').replace('</p>', '').replace("'", '')
+    content_text1 = content.replace(
+        '<p>',
+        '').replace(
+        '</p>',
+        '').replace(
+            "'",
+        '')
     # 去掉图片链接
-    content_text2 = re.sub('(!\[.*?\]\(.*?\))', '', content_text1)
+    content_text2 = re.sub(r'(!\[.*?\]\(.*?\))', '', content_text1)
     # 去掉markdown标签
-    pattern = '[\\\`\*\_\[\]\#\+\-\!\>]'
+    pattern = r'[\\\`\*\_\[\]\#\+\-\!\>]'
     content_text3 = re.sub(pattern, '', content_text2)
     return content_text3
+
+
+@register.inclusion_tag('article/list/Carousel.html')
+def carousel_img():
+    carousels = Carousel.objects.all()
+    return {'img_urls': carousels}

@@ -3,11 +3,16 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.urls import reverse
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 
 # Create your models here.
 class ArticleColumn(models.Model):
-    user = models.ForeignKey(User, related_name='article_column',on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User,
+        related_name='article_column',
+        on_delete=models.CASCADE)
     column = models.CharField(' 栏目 ', max_length=200)
     created = models.DateTimeField(' 创建时间 ', auto_now_add=True)
 
@@ -21,14 +26,21 @@ class ArticleColumn(models.Model):
 
 
 class ArticlePost(models.Model):
-    author = models.ForeignKey(User,related_name='article_post',on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        User,
+        related_name='article_post',
+        on_delete=models.CASCADE)
     title = models.CharField(' 文章标题 ', max_length=200)
     slug = models.SlugField(max_length=500)
-    column = models.ForeignKey(ArticleColumn, on_delete=models.CASCADE,related_name='article_column')
+    column = models.ForeignKey(
+        ArticleColumn,
+        on_delete=models.CASCADE,
+        related_name='article_column')
     body = models.TextField(' 文章内容 ')
     created = models.DateTimeField(' 创建时间 ', default=timezone.now)
     updated = models.DateTimeField(' 更新时间 ', auto_now=True)
-    users_like = models.ManyToManyField(User, related_name="users_like",blank=True)
+    users_like = models.ManyToManyField(
+        User, related_name="users_like", blank=True)
 
     class Meta:
         ordering = ("-updated",)
@@ -45,11 +57,18 @@ class ArticlePost(models.Model):
 
 
 class Comment(models.Model):
-    article = models.ForeignKey(ArticlePost, on_delete=models.CASCADE, related_name="comments")
-    commentator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commentator")
+    article = models.ForeignKey(
+        ArticlePost,
+        on_delete=models.CASCADE,
+        related_name="comments")
+    commentator = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="commentator")
     body = models.TextField()
     created = models.DateTimeField(default=timezone.now)
-    comment_like = models.ManyToManyField(User, related_name="comment_like", blank=True)
+    comment_like = models.ManyToManyField(
+        User, related_name="comment_like", blank=True)
     is_read = models.IntegerField(default=0)
     is_deleted = models.BooleanField(default=False)
 
@@ -59,4 +78,33 @@ class Comment(models.Model):
         verbose_name_plural = ' 文章评论 '
 
     def __str__(self):
-        return "Comment by {} on {}".format(self.commentator,self.created)
+        return "Comment by {} on {}".format(self.commentator, self.created)
+
+
+class Carousel(models.Model):
+    title = models.CharField(
+        '图片标题',
+        max_length=50,
+        blank=True,
+        null=True,
+        default='LightBlog niubility')
+    image = models.ImageField('轮播图片',
+                              upload_to='Carousel')
+    image_625x270 = ImageSpecField(
+        source="image",
+        processors=[ResizeToFill(625, 270)],  # 处理后的图像大小
+        format='JPEG',  # 处理后的图片格式
+        options={'quality': 95}  # 处理后的图片质量
+    )
+
+    image_130x56 = ImageSpecField(
+        source="image",
+        processors=[ResizeToFill(130, 56)],  # 处理后的图像大小
+        format='JPEG',  # 处理后的图片格式
+        options={'quality': 90}  # 处理后的图片质量
+    )
+
+    class Meta:
+        # 如果只设置verbose_name，在Admin中会显示“产品信息 s”
+        verbose_name = ' 轮播图 '
+        verbose_name_plural = ' 轮播图 '
