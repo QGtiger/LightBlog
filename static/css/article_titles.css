@@ -35,10 +35,27 @@
     padding: 8px 10px;
 }
 
+.list-group .meta{
+	padding:10px;
+}
+
 .meta span{
     color: #b4b4b4 !important;
 }
 
 .meta .update_time{
 	float:right;
+}
+
+.small-avator{
+	width:24px !important;
+	height: 24px !important;
+}
+
+.list-group .article-likes{
+	padding-left:10px;
+}
+
+.list-group .article-views{
+	padding-left:10px;
 }

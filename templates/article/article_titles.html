@@ -75,11 +75,15 @@
                             '<a href="/article/article_content/'+res[i].id+'" class="list-group-item active">'+
                                 '<h3 class="list-group-item-heading">'+res[i].title+'</h3>'+
                             '</a>'+
-                            '<p class="list-group-item-text">作者:'+res[i].author+'</p>'+
-                            '<p class="list-group-item-text">概要:'+res[i].body+'</p>'+
-                            '<p class="meta"><span><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
-                            '<span class="update_time">'+Time.getFormatTime(res[i].updated)+'</span>'+
-                            '</p>'+
+                            '<p class="list-group-item-text">概要:'+res[i].body+'...</p>'+
+                            '<div class="meta">'+
+                                '<a href="/account/author/'+res[1].author+'">'+
+                                    '<img src="'+res[i].author_img_url+'" class="layui-nav-img small-avator" alt="">'+
+                                '</a><a href="/account/author/'+res[1].author+'">'+res[i].author+'</a>'+
+                                '<span class="article-likes"><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
+                                '<span class="article-views"><i class="layui-icon layui-icon-read"></i> '+res[i].views+'</span>'+
+                                '<span class="update_time">'+Time.getFormatTime(res[i].updated)+'</span>'+
+                            '</div>'+
                         '</div>';
 
                         lis+=item;
