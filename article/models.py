@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+from imagekit.models import ProcessedImageField
 
 
 # Create your models here.
@@ -88,14 +89,11 @@ class Carousel(models.Model):
         blank=True,
         null=True,
         default='LightBlog niubility')
-    image = models.ImageField('轮播图片',
-                              upload_to='Carousel')
-    image_625x270 = ImageSpecField(
-        source="image",
-        processors=[ResizeToFill(625, 270)],  # 处理后的图像大小
-        format='JPEG',  # 处理后的图片格式
-        options={'quality': 95}  # 处理后的图片质量
-    )
+    image = ProcessedImageField(
+        upload_to='Carousel',
+        processors=[ResizeToFill(937, 405)],
+        format='JPEG',
+        options={'quality':98}, verbose_name='展示图片')
 
     image_130x56 = ImageSpecField(
         source="image",
