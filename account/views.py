@@ -188,6 +188,7 @@ def my_image(request):
     username = request.user.username
     if request.method == 'POST':
         uploadimg = request.FILES.get('uploadimg', '')
+        print(type(uploadimg))
         userinfo = UserInfo.objects.get(user=request.user)
         avatorInfo = str(userinfo.photo).split('/')
         if avatorInfo[0] == 'default':

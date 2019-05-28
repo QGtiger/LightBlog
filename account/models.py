@@ -21,7 +21,9 @@ class UserInfo(models.Model):
         upload_to='avator',
         processors=[ResizeToFill(400, 400)],
         format='JPEG',
-        options={'quality':98}, verbose_name='展示图片')
+        options={'quality':98},
+        default='default/default.jpg',
+        verbose_name='展示图片')
 
     # 注意：ImageSpecField不会生成数据库中的表
     # 处理后的图片

@@ -4,7 +4,7 @@
 
 @media screen and (max-width: 500px){
     .container{
-        margin:20px 30px 0 30px;
+        margin:20px 10px 0 10px;
     }
 }
 
@@ -24,6 +24,8 @@
 	border-bottom:1px solid #f0f0f0;
 	margin:20px 0 20px 0;
 	padding-bottom: 20px;
+	height: 150px;
+	position: relative;
 }
 
 .list-group .list-group-item-heading{
@@ -31,12 +33,35 @@
 	margin:0 0 7px 0;
 }
 
+.list-group .list-group-item-body{
+    height: 120px;
+}
+
 .list-group .list-group-item-text{
     padding: 8px 10px;
+    height: 86px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    overflow: hidden;
+}
+
+.list-group .list-group-item-img{
+    width=120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+}
+
+.list-group .list-group-item-img img{
+    border-radius: 4px;
 }
 
 .list-group .meta{
-	padding:10px;
+    margin: 5px 10px 5px 10px;
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
 }
 
 .meta span{
@@ -45,6 +70,15 @@
 
 .meta .update_time{
 	float:right;
+	padding-right:15px;
+}
+
+.meta .update_time:after{
+    content: "";
+    display:block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
 
 .small-avator{

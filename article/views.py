@@ -1,13 +1,16 @@
-from django.shortcuts import render,HttpResponse,get_object_or_404
+from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
-from .models import ArticleColumn,ArticlePost
-from .forms import ArticleColumnForm,ArticlePostForm
-from django.core.paginator import PageNotAnInteger,Paginator,EmptyPage
+from .models import ArticleColumn, ArticlePost
+from .forms import ArticleColumnForm, ArticlePostForm
+from django.core.paginator import PageNotAnInteger, Paginator, EmptyPage
 from .tasks import *
 import json
+import re
+import requests
+from django.core.files.base import ContentFile
 
 
 # Create your views here.
@@ -18,14 +21,14 @@ def article_column(request):
     if request.method == 'GET':
         columns = ArticleColumn.objects.filter(user=user)
         # column_form = ArticleColumnForm()
-        return render(request,'article/article_column.html',locals())
+        return render(request, 'article/article_column.html', locals())
     if request.method == 'POST':
         column_name = request.POST['column']
-        columns = ArticleColumn.objects.filter(user=user,column=column_name)
+        columns = ArticleColumn.objects.filter(user=user, column=column_name)
         if columns:
             return HttpResponse('2')
         else:
-            ArticleColumn.objects.create(user=user,column=column_name)
+            ArticleColumn.objects.create(user=user, column=column_name)
             return HttpResponse('1')
 
 
@@ -40,7 +43,7 @@ def rename_article_column(request):
         line.column = column_name
         line.save()
         return HttpResponse("1")
-    except:
+    except BaseException:
         return HttpResponse("0")
 
 
@@ -53,7 +56,7 @@ def del_article_column(request):
         line = ArticleColumn.objects.get(id=column_id)
         line.delete()
         return HttpResponse("1")
-    except:
+    except BaseException:
         return HttpResponse("2")
 
 
@@ -62,23 +65,34 @@ def del_article_column(request):
 def article_post(request):
     user = request.user
     if request.method == 'POST':
-        article_post_form = ArticlePostForm(data=request.POST)
+        data = request.POST
+        article_post_form = ArticlePostForm(data=data)
         if article_post_form.is_valid():
             cd = article_post_form.cleaned_data
             try:
                 new_article = article_post_form.save(commit=False)
                 new_article.author = user
-                new_article.column = user.article_column.get(id=request.POST['column_id'])
+                new_article.column = user.article_column.get(
+                    id=request.POST['column_id'])
                 new_article.save()
+                imgs = re.findall(
+                    re.compile(r'!\[.*?\]\((.*?)\)'), data.get('body',''))
+                if len(imgs) > 0:
+                    try:
+                        content = ContentFile(requests.get(imgs[0]).content)
+                        new_article.image_preview.save(str(new_article.id) + '.jpg', content)
+                    except Exception as e:
+                        print(e)
                 return HttpResponse('1')
-            except:
+            except BaseException as e:
+                print(e)
                 return HttpResponse('2')
         else:
             return HttpResponse('3')
     else:
         article_post_form = ArticlePostForm()
         article_columns = user.article_column.all()
-        return render(request,'article/article_post.html',locals())
+        return render(request, 'article/article_post.html', locals())
 
 
 @login_required(login_url='/account/login/')
@@ -96,7 +110,7 @@ def article_list(request):
     except EmptyPage:
         current_page = paginator.page(paginator.num_pages)
         articles = current_page.object_list
-    return render(request,'article/article_list.html',locals())
+    return render(request, 'article/article_list.html', locals())
 
 
 @login_required(login_url='/account/login/')
@@ -121,7 +135,7 @@ def del_article(request):
         article = ArticlePost.objects.get(id=article_id)
         article.delete()
         return HttpResponse("1")
-    except:
+    except BaseException:
         return HttpResponse("2")
 
 
@@ -136,17 +150,21 @@ def redit_article(request, article_id):
         article_columns = user.article_column.all()
         # this_article_form = ArticlePostForm(initial={"title": article.title})
         this_article_column = article.column
-        return render(request, "article/redit_article.html",
-                      {"article": article, "article_columns": article_columns, "this_article_column": this_article_column})
+        return render(request,
+                      "article/redit_article.html",
+                      {"article": article,
+                       "article_columns": article_columns,
+                       "this_article_column": this_article_column})
     else:
         redit_article = ArticlePost.objects.get(id=article_id)
         try:
-            redit_article.column = user.article_column.get(id=request.POST['column_id'])
+            redit_article.column = user.article_column.get(
+                id=request.POST['column_id'])
             redit_article.title = request.POST['title']
             redit_article.body = request.POST['body']
             redit_article.save()
             return HttpResponse("1")
-        except:
+        except BaseException:
             return HttpResponse("2")
 
 
@@ -155,7 +173,7 @@ def redit_article(request, article_id):
 @csrf_exempt
 def like_article(request):
     user = request.user
-    article_id = request.POST.get('id','')
+    article_id = request.POST.get('id', '')
     action = request.POST.get('action')
     if article_id and action:
         try:
@@ -164,16 +182,20 @@ def like_article(request):
             if action == 'like':
                 for item in article_likes:
                     if item == user:
-                        return HttpResponse(json.dumps({'static':200,'tips':'不能重复点┗|｀O′|┛ 嗷~~~，亲[呕]^-^'}))
+                        return HttpResponse(json.dumps(
+                            {'static': 200, 'tips': '不能重复点┗|｀O′|┛ 嗷~~~，亲[呕]^-^'}))
                 article.users_like.add(user)
                 num = article.users_like.count()
-                return HttpResponse(json.dumps({'static':201,'tips':'感谢您的喜爱','num':num,'user':user.username}))
+                return HttpResponse(json.dumps(
+                    {'static': 201, 'tips': '感谢您的喜爱', 'num': num, 'user': user.username}))
             else:
                 article.users_like.remove(user)
                 num = article.users_like.count()
-                return HttpResponse(json.dumps({'static':202,'tips':'我会努力的', 'num':num,'user':user.username}))
-        except:
-            return HttpResponse(json.dumps({'static':500,'tips':'系统错误,重新尝试'}))
+                return HttpResponse(json.dumps(
+                    {'static': 202, 'tips': '我会努力的', 'num': num, 'user': user.username}))
+        except BaseException:
+            return HttpResponse(json.dumps(
+                {'static': 500, 'tips': '系统错误,重新尝试'}))
 
 
 # 404,505页面

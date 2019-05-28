@@ -6,6 +6,7 @@ from django.urls import reverse
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from imagekit.models import ProcessedImageField
+import os
 
 
 # Create your models here.
@@ -26,6 +27,10 @@ class ArticleColumn(models.Model):
         verbose_name_plural = ' 文章栏目 '
 
 
+def article_img_path(instance, filename):
+    return os.path.join('previewBlog', str(instance.author.id), filename)
+
+
 class ArticlePost(models.Model):
     author = models.ForeignKey(
         User,
@@ -42,6 +47,13 @@ class ArticlePost(models.Model):
     updated = models.DateTimeField(' 更新时间 ', auto_now=True)
     users_like = models.ManyToManyField(
         User, related_name="users_like", blank=True)
+    image_preview = ProcessedImageField(
+        upload_to=article_img_path,
+        processors=[ResizeToFill(320, 260)],
+        format='JPEG',
+        options={'quality':98},
+        default='default/preview.jpg',
+        verbose_name='展示图片')
 
     class Meta:
         ordering = ("-updated",)
