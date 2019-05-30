@@ -79,21 +79,21 @@
                                         '<h3 class="list-group-item-heading">'+res[i].title+'</h3>'+
                                     '</a>'+
                                     '<p class="list-group-item-text">概要:'+res[i].body+'...</p>'+
-                                    '<div class="meta">'+
-                                        '<a href="/account/author/'+res[i].author+'">'+
-                                            '<img src="'+res[i].author_img_url+'" class="layui-nav-img small-avator" alt="">'+
-                                        '</a><a href="/account/author/'+res[i].author+'">'+res[i].author+'</a>'+
-                                        '<span class="article-likes"><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
-                                        '<span class="article-views"><i class="layui-icon layui-icon-read"></i> '+res[i].views+'</span>'+
-                                        '<span class="update_time">'+Time.getFormatTime(res[i].updated)+'</span>'+
-                                    '</div>'+
                                 '</div>'+
                                 '<div class="layui-col-xs3 list-group-item-img">'+
                                     '<a href="/article/article_content/'+res[i].id+'">'+
-                                        '<img width="100%" src="'+ res[i].blog_img_url +'" title="">'+
+                                        '<img width="80%" src="'+ res[i].blog_img_url +'" title="">'+
                                     '</a>'+
                                 '</div>'+
-                        '</div>';
+                                '<div class="meta">'+
+                                    '<a href="/account/author/'+res[i].author+'">'+
+                                        '<img src="'+res[i].author_img_url+'" class="layui-nav-img small-avator" alt="">'+
+                                    '</a><a href="/account/author/'+res[i].author+'">'+res[i].author+'</a>'+
+                                    '<span class="article-likes"><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
+                                    '<span class="article-views"><i class="layui-icon layui-icon-read"></i> '+res[i].views+'</span>'+
+                                    '<span class="update_time">'+Time.getFormatTime(res[i].updated)+'</span>'+
+                                '</div>'+
+                            '</div>';
 
                         lis+=item;
 
