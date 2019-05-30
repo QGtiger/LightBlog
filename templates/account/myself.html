@@ -75,6 +75,7 @@
 <script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/layer.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/layui.js' %}"></script>
+<script src="{% static 'js/vue/time.js' %}"></script>
 <script type="text/javascript">
 	layui.use(['layer','flow','element'],function(){
 		var layer = layui.layer;
@@ -95,14 +96,22 @@
                     console.log(res)
 				    for(var i = 0; i < res.length; i++){
 
-                        var item = '<div class="list-group">'+
-                            '<a href="/article/article_content/'+res[i].id+'" class="list-group-item active">'+
-                                '<h3 class="list-group-item-heading">'+res[i].title+'</h3>'+
-                            '</a>'+
-                            '<p class="list-group-item-text">概要:'+res[i].body+'</p>'+
-                            '<p class="meta"><span><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
-                            '<span class="update_time">'+res[i].updated+'</span>'+
-                            '</p>'+
+                        var item = '<div class="list-group layui-row">'+
+                                '<div class="layui-col-xs9 list-group-item-body">'+
+                                     '<a href="/article/article_content/'+res[i].id+'" class="list-group-item active">'+
+                                        '<h3 class="list-group-item-heading">'+res[i].title+'</h3>'+
+                                    '</a>'+
+                                    '<p class="list-group-item-text">概要:'+res[i].body+'...</p>'+
+                                '</div>'+
+                                '<div class="layui-col-xs3 list-group-item-img">'+
+                                    '<a href="/article/article_content/'+res[i].id+'">'+
+                                        '<img width="165px" src="'+ res[i].blog_img_url +'" title="">'+
+                                    '</a>'+
+                                '</div>'+
+                                '<div class="meta">'+
+                                    '<span class="article-likes"><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
+                                    '<span class="update_time">'+Time.getFormatTime(res[i].updated)+'</span>'+
+                                '</div>'+
                         '</div>';
 
                         lis+=item;

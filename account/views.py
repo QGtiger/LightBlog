@@ -15,7 +15,7 @@ from article.models import ArticlePost
 from article.list_views import init_blog
 from .forms import *
 import json
-import shutil
+import time
 import os
 
 
@@ -155,7 +155,7 @@ def article_page(request, username):
         articles = current_page.object_list
     articles_json = []
     for i in range(len(articles)):
-        articles_json.append({'id':articles[i].id,'title':articles[i].title,'updated':articles[i].updated.strftime("%Y-%m-%d %H:%M:%S"),'body': init_blog(articles[i].body[:150]), 'users_like':articles[i].users_like.count()})
+        articles_json.append({'id':articles[i].id,'title':articles[i].title,'blog_img_url': articles[i].image_preview.url,'updated':time.mktime(articles[i].updated.timetuple()),'body': init_blog(articles[i].body[:150]), 'users_like':articles[i].users_like.count()})
     #return HttpResponse(serializers.serialize("json",articles))
     return HttpResponse(json.dumps({'static':200,'data':articles_json,'page_num':paginator.num_pages}))
 

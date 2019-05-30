@@ -24,7 +24,7 @@
 	border-bottom:1px solid #f0f0f0;
 	margin:20px 0 20px 0;
 	padding-bottom: 20px;
-	height: 150px;
+	height: 136px;
 	position: relative;
 }
 
@@ -42,8 +42,11 @@
     height: 86px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 5;
+    -webkit-line-clamp: 4;
     overflow: hidden;
+    line-height:24px;
+    font-size: 13px;
+    color: #999;
 }
 
 .list-group .list-group-item-img{
@@ -51,6 +54,7 @@
     height: 120px;
     display: flex;
     align-items: center;
+    justify-content: flex-end;
 }
 
 .list-group .list-group-item-img img{
@@ -92,4 +96,17 @@
 
 .list-group .article-views{
 	padding-left:10px;
+}
+
+.article_ranking .most-views{
+    display: inline-block;
+    padding: 8px 30px 8px 10px;
+    background: #f1a907a1;
+    color: white;
+    border-radius: 5px;
+    font-family: cursive;
+}
+
+.article_ranking li{
+    padding-top: 5px;
 }

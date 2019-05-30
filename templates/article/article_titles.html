@@ -17,12 +17,8 @@
         </div>
         <div class="layui-col-xs12 layui-col-md4">
             <div class="article_ranking" style="margin:20px 40px">
-                <h3>最受欢迎文章</h3>
-                <ol>
-                    {% for article in most_viewed %}
-                    <li><a href="{% url 'article:article_content' article.id %}">{{ forloop.counter }}. {{ article.title }}</a></li>
-                    {% endfor %}
-                </ol>
+                <h3 class="most-views">最受欢迎文章</h3>
+                {% most_views %}
             </div>
         </div>
     </div>
@@ -40,7 +36,7 @@
     var width = Carousel.width();
     Carousel.height(0.42*width);
     var blog_img = $('.list-group-item-img img');
-    var imgWidth = blog_img.width();
+    var imgWidth = blog_img.height();
     blog_img.height(0.8125*imgWidth);
     window.onresize = function(){
         var Carousel = $('#Carousel');
@@ -68,7 +64,6 @@
 			elem: "#flow_demo",
 			is_Auto:true,
 			end: "emm,nothing next",
-			is_Lazyimg: true,
 			done: function(page,next){
 				var lis = '';
 				$.get('/article/article_page/?page='+page, function(e){
@@ -84,19 +79,19 @@
                                         '<h3 class="list-group-item-heading">'+res[i].title+'</h3>'+
                                     '</a>'+
                                     '<p class="list-group-item-text">概要:'+res[i].body+'...</p>'+
+                                    '<div class="meta">'+
+                                        '<a href="/account/author/'+res[i].author+'">'+
+                                            '<img src="'+res[i].author_img_url+'" class="layui-nav-img small-avator" alt="">'+
+                                        '</a><a href="/account/author/'+res[i].author+'">'+res[i].author+'</a>'+
+                                        '<span class="article-likes"><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
+                                        '<span class="article-views"><i class="layui-icon layui-icon-read"></i> '+res[i].views+'</span>'+
+                                        '<span class="update_time">'+Time.getFormatTime(res[i].updated)+'</span>'+
+                                    '</div>'+
                                 '</div>'+
                                 '<div class="layui-col-xs3 list-group-item-img">'+
                                     '<a href="/article/article_content/'+res[i].id+'">'+
                                         '<img width="100%" src="'+ res[i].blog_img_url +'" title="">'+
                                     '</a>'+
-                                '</div>'+
-                                '<div class="meta">'+
-                                    '<a href="/account/author/'+res[1].author+'">'+
-                                        '<img src="'+res[i].author_img_url+'" class="layui-nav-img small-avator" alt="">'+
-                                    '</a><a href="/account/author/'+res[1].author+'">'+res[i].author+'</a>'+
-                                    '<span class="article-likes"><i class="layui-icon layui-icon-praise"></i> '+res[i].users_like+'</span>'+
-                                    '<span class="article-views"><i class="layui-icon layui-icon-read"></i> '+res[i].views+'</span>'+
-                                    '<span class="update_time">'+Time.getFormatTime(res[i].updated)+'</span>'+
                                 '</div>'+
                         '</div>';
 
