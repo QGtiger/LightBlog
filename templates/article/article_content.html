@@ -16,7 +16,11 @@
             <div>
                 <header>
                     <h1 style="margin:20px 0">{{ article.title }}</h1>
-                    <p style="padding-left:10px"><a href="{% url 'account:author_info' article.author.username %}">{{ article.author.username }}</a><span style="margin-left:20px"><span class="article_likes">{{ total_likes }}</span> like{{ total_likes|pluralize }}</span><span style="margin-left:20px">{{ total_views }} view{{ total_views|pluralize }}</span></p>
+                    <p style="padding-left:10px">
+                        <a href="{% url 'account:author_info' article.author.username %}"><img src="{{ article.author.userinfo.photo_150x150.url}}" class="layui-nav-img small-avator" alt=""></a>
+                        <a href="{% url 'account:author_info' article.author.username %}">{{ article.author.username }}</a><span style="margin-left:20px"><span class="article_likes">{{ total_likes }}</span> like{{ total_likes|pluralize }}</span><span style="margin-left:20px">{{ total_views }} view{{ total_views|pluralize }}</span>
+                        <span style="margin-left:20px">wordCount: {{ article.word_count }}</span>
+                    </p>
                 </header>
 
     <link rel="stylesheet" href="{% static 'editor/css/editormd.preview.css' %}"/>

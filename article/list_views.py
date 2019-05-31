@@ -51,7 +51,7 @@ def article_page(request):
     articles_json = []
     for i in range(len(articles)):
         view = r.get('article:{}:views'.format(articles[i].id))
-        if view == None:
+        if view is None:
             view_count = 0
         else:
             view_count = view.decode('utf-8')

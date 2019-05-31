@@ -74,6 +74,7 @@ def article_post(request):
                 new_article.author = user
                 new_article.column = user.article_column.get(
                     id=request.POST['column_id'])
+                new_article.word_count = len(data.get('body', ''))
                 new_article.save()
                 imgs = re.findall(
                     re.compile(r'!\[.*?\]\((.*?)\)'), data.get('body',''))

@@ -55,6 +55,8 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    overflow: hidden;
+    border-radius: 4px;
 }
 
 .list-group .list-group-item-img img{

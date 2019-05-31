@@ -43,6 +43,7 @@ class ArticlePost(models.Model):
         on_delete=models.CASCADE,
         related_name='article_column')
     body = models.TextField(' 文章内容 ')
+    word_count = models.IntegerField(' 文章字数 ', default=233)
     created = models.DateTimeField(' 创建时间 ', default=timezone.now)
     updated = models.DateTimeField(' 更新时间 ', auto_now=True)
     users_like = models.ManyToManyField(
