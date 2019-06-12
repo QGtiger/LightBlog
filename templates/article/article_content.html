@@ -5,6 +5,7 @@
 {% block link %}
 <link rel="stylesheet" href="{% static 'css/article_comment.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/layui.css' %}">
+<link rel="stylesheet" href="{% static 'css/article_content.css' %}">
 {% endblock %}
 {% block content %}
 
@@ -44,28 +45,42 @@
                 <p><strong>点赞本文的读者</strong></p>
             </div>
         </div>
-        <div class="layui-col-xs12 layui-col-md4" style="padding:20px 50px">
-            <h3 style="text-align:center">最新文章</h3>
+        <div class="layui-col-xs12 layui-col-md4 content-right" style="padding:60px 50px">
+            <h3 class="lastest-articles">最新文章</h3>
             {% latest_articles 4 %}
             <hr>
-            <h3 style="text-align:center">最多评论文章</h3>
+            <h3 class="most-comments-articles">最多评论文章</h3>
             {% most_commented_articles as articles %}
             <ul>
                 {% for article in articles %}
-                <li>
-                    <a href="{% url 'article:article_content' article.id %}">{{ forloop.counter }}.{{ article.title }}</a>
-                </li>
+                    {% if forloop.counter == 1 %}
+                        <li><a href="{% url 'article:article_content' article.id %}"><span class="layui-badge">{{ forloop.counter }}.</span> {{ article.title }}</a></li>
+                    {% elif forloop.counter == 2 %}
+                        <li><a href="{% url 'article:article_content' article.id %}"><span class="layui-badge layui-bg-orange">{{ forloop.counter }}.</span> {{ article.title }}</a></li>
+                    {% elif forloop.counter == 3 %}
+                        <li><a href="{% url 'article:article_content' article.id %}"><span class="layui-badge layui-bg-green">{{ forloop.counter }}.</span> {{ article.title }}</a></li>
+                    {% elif forloop.counter == 4 %}
+                        <li><a href="{% url 'article:article_content' article.id %}"><span class="layui-badge layui-bg-cyan">{{ forloop.counter }}.</span> {{ article.title }}</a></li>
+                    {% elif forloop.counter == 5 %}
+                        <li><a href="{% url 'article:article_content' article.id %}"><span class="layui-badge layui-bg-blue">{{ forloop.counter }}.</span> {{ article.title }}</a></li>
+                    {% endif %}
+                {% empty %}
+                <p>nothing..</p>
                 {% endfor %}
             </ul>
             <hr>
-            <h3 style="text-align:center">最受欢迎文章</h3>
+            <h3 class="most-views-articles">最受欢迎文章</h3>
             {% most_views %}
         </div>
     </div>
     <div class="comment">
         <form action="" method="POST">{% csrf_token %}
         <div class="layui-form-label " style="height:80px">
+            {% if request.user.username %}
             <img src="{{ request.user.userinfo.photo_150x150.url }}" class="layui-nav-img">
+            {% else %}
+            <img src="/media/default/default.jpg" class="layui-nav-img">
+            {% endif %}
         </div>
     <div class="layui-input-block">
       <textarea placeholder="请输入内容" class="layui-textarea comment_text" style="resize:none"></textarea>
