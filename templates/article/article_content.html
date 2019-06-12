@@ -32,7 +32,11 @@
     </div>
             </div>
             <div style="text-align:center">
-                <a href="javascript:void(0);" onclick="is_like({{ article.id }},'like')"><span><i class="layui-icon layui-icon-praise"></i>like</span></a>
+                {% if is_like %}
+                <a href="javascript:void(0);" onclick="is_like({{ article.id }},'like')"><span><i class="layui-icon layui-icon-praise is-like-article like-article"></i>like</span></a>
+                {% else %}
+                <a href="javascript:void(0);" onclick="is_like({{ article.id }},'like')"><span><i class="layui-icon layui-icon-praise is-like-article"></i>like</span></a>
+                {% endif %}
                 <span style="display:inline-block;width:50px"></span>
                 <a href="javascript:void(0);" onclick="is_like({{ article.id }},'unlike')"><span><i class="layui-icon layui-icon-tread"></i>unlike</span></a>
             </div>
@@ -514,6 +518,7 @@ function is_like(id, action){
                     $('.support-article-users').prepend('<p><a class="'+e.user+'" href="/account/author/'+onuser+'">'+e.user+'</a></p>');
                     $('.nobody-support').css('display','none');
                     $('.article_likes').text(e.num)
+                    $('.is-like-article').addClass('like-article')
                 }else if(e.static=='202'){
                     layer.msg(e.tips,{time:1500});
                     $('.'+e.user).remove();
@@ -521,6 +526,7 @@ function is_like(id, action){
                         $('.nobody-support').css('display','block');
                     }
                     $('.article_likes').text(e.num)
+                    $('.is-like-article').removeClass('like-article')
                 }else{
                     layer.msg(e.tips,{time:1500});
                 }

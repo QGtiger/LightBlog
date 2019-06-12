@@ -99,6 +99,11 @@ def article_content(request, article_id):
         article = get_object_or_404(ArticlePost, id=article_id)
         total_views = r.incr("article:{}:views".format(article_id))
         r.zincrby('article_ranking', 1, article_id)
+        is_like = False
+        if request.user.username:
+            user = request.user
+            if user in article.users_like.all():
+                is_like = True
         return render(request, "article/article_content.html", locals())
 
 
