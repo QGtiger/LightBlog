@@ -158,6 +158,11 @@ $(function(){
 
 });
 
+//js html 转义
+function htmlEncode(str){
+    return $('<span/>').text(str).html()
+}
+
 // 初始化子评论
 function init_comment(items){
     lis = ''
@@ -176,7 +181,7 @@ function init_comment(items){
                 '<span style="margin-left:20px">'+ Time.getFormatTime(data.created)+'</span>'+
             '</div>'+
             '<div class="comment-wrap">'+
-                '<pre>'+data.body+'</pre>'+
+                '<pre>'+htmlEncode(data.body)+'</pre>'+
             '</div>'+
             '<div class="meta">'
         if('{{request.user.username}}'==data.from){
@@ -222,7 +227,7 @@ layui.use(['layer', 'flow'], function(){
                             '<span style="margin-left:20px"> 人气值: <span class="support-comment">'+comments[i].comment_like+'</span></span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
-                            '<pre>'+comments[i].body+'</pre>'+
+                            '<pre>'+htmlEncode(comments[i].body)+'</pre>'+
                         '</div>'+
                         '<div class="meta">'+
                             '<a href="javascript:void(0)" onclick="comment_like('+comments[i].id+',\'like\',this)"><span><i class="layui-icon layui-icon-praise"></i> <span class="comment-like">赞</span></span></a>'+
@@ -247,7 +252,7 @@ layui.use(['layer', 'flow'], function(){
                             '<span style="margin-left:20px"> 人气值: <span class="support-comment">'+comments[i].comment_like+'</span></span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
-                            '<pre>'+comments[i].body+'</pre>'+
+                            '<pre>'+htmlEncode(comments[i].body)+'</pre>'+
                         '</div>'+
                         '<div class="meta">'+
                                 '<a href="javascript:void(0)" onclick="comment_like('+comments[i].id+',\'like\',this)"><span><i class="layui-icon layui-icon-praise"></i> <span class="comment-like">赞</span></span></a>'+
@@ -342,7 +347,7 @@ $(document).ready(function(){
                             '<span style="margin-left:20px">'+ Time.getFormatTime(data.created)+'</span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
-                            '<pre>'+data.body+'</pre>'+
+                            '<pre>'+htmlEncode(data.body)+'</pre>'+
                         '</div>'+
                         '<div class="meta">'+
                             '<a href="javascript:void(0)" onclick="comment_reply_delete('+data.id+', this)" class="comment-tool comment-delete"><span><i class="layui-icon layui-icon-delete"></i> <span>删 除</span></span></a>'+
@@ -388,7 +393,7 @@ $(document).ready(function(){
                             '<span style="margin-left:20px"> 人气值: <span class="support-comment">'+comment_root.comment_like+'</span></span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
-                            '<pre>'+comment_root.body+'</pre>'+
+                            '<pre>'+htmlEncode(comment_root.body)+'</pre>'+
                         '</div>'+
                         '<div class="meta">'+
                         '</div>'+
@@ -409,7 +414,7 @@ $(document).ready(function(){
                             '<span style="margin-left:20px"> 人气值: <span class="support-comment">'+comment_root.comment_like+'</span></span>'+
                         '</div>'+
                         '<div class="comment-wrap">'+
-                            '<pre>'+comment_root.body+'</pre>'+
+                            '<pre>'+htmlEncode(comment_root.body)+'</pre>'+
                         '</div>'+
                         '<div class="meta">'+
                             '<a href="javascript:void(0)" comment_id="'+comment_root.id+'" class="comment_reply comment-tool" onclick="comment_reply(this)"><span><i class="layui-icon layui-icon-reply-fill"></i> <span class="tool-text tool-reply">回 复</span></span></a>'+
@@ -561,6 +566,7 @@ function comment_like(id, action, n){
     }
 }
 
+
 $('.comment-btn').on('click',function(){
     if($('.username').val()==''){
         layer.msg('请先登录')
@@ -593,7 +599,7 @@ $('.comment-btn').on('click',function(){
                         '<span style="margin-left:20px"> 人气值: <span class="support-comment">0</span></span>'+
                     '</div>'+
                     '<div class="comment-wrap">'+
-                        '<pre>'+commentator.body+'</pre>'+
+                        '<pre>'+htmlEncode(commentator.body)+'</pre>'+
                     '</div>'+
                     '<div class="meta">'+
                         '<a href="javascript:void(0)" onclick="comment_like('+commentator.id+',\'like\',this)"><span><i class="layui-icon layui-icon-praise"></i> <span class="comment-like">赞</span></span></a>'+
